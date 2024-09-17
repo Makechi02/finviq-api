@@ -1,0 +1,9 @@
+spring:
+    data:
+        mongodb:
+            uri: ${mongodb.uri}
+
+application:
+    security:
+        jwt:
+            secret-key: ${jwt-secret-key}

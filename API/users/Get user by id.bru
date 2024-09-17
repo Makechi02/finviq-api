@@ -1,0 +1,15 @@
+meta {
+  name: Get user by id
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/api/v1/users/66d0a17eb48aebab27f74eb6
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NDAzMTY1LCJleHAiOjE3MjY0ODk1NjV9.o_TZqZ1ZamIYVBB4Gxr2RT8ayxcbt4Pc3_LHhV4cLQk
+}

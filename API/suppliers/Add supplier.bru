@@ -1,0 +1,23 @@
+meta {
+  name: Add supplier
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/v1/suppliers
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NDA5MzI4LCJleHAiOjE3MjY0OTU3Mjh9.td7c5fKnWD0UsM0R0c6JRfqTLR38SJNiIMzq5d5WxpE
+}
+
+body:json {
+  {
+    "name": "Khwisero Suppliers Ltd.",
+    "address": "48, Khwisero",
+    "phone": "0798765432"
+  }
+}

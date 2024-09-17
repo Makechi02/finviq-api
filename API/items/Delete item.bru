@@ -1,0 +1,15 @@
+meta {
+  name: Delete item
+  type: http
+  seq: 6
+}
+
+delete {
+  url: http://localhost:8080/api/v1/items/66e73e6f834ae40bb33877b2
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NTY4NTMwLCJleHAiOjE3MjY2NTQ5MzB9.gHrbHBJP912yHN8ZTDMTRvZe_IYB-VtwOubhC0jyWbM
+}

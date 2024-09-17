@@ -1,0 +1,15 @@
+meta {
+  name: Get item by sku
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/api/v1/items/sku/SAM-ELE-2125
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NTY4NTMwLCJleHAiOjE3MjY2NTQ5MzB9.gHrbHBJP912yHN8ZTDMTRvZe_IYB-VtwOubhC0jyWbM
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Update user
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8080/api/v1/users/66e6d389a6c1e834180d70f2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NDAzMTY1LCJleHAiOjE3MjY0ODk1NjV9.o_TZqZ1ZamIYVBB4Gxr2RT8ayxcbt4Pc3_LHhV4cLQk
+}
+
+body:json {
+  {
+    "name": "Mkuu Rugenzi",
+    "email": "admin@admin.com",
+    "role": "USER"
+  }
+}

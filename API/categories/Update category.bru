@@ -1,0 +1,17 @@
+meta {
+  name: Update category
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/api/v1/categories/66e6ba15f97429447c79c659
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "electronics"
+  }
+}

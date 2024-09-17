@@ -1,0 +1,27 @@
+meta {
+  name: Update Item
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8080/api/v1/items/66e95e62ba8e1212f0f7c84c
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NTY4NTMwLCJleHAiOjE3MjY2NTQ5MzB9.gHrbHBJP912yHN8ZTDMTRvZe_IYB-VtwOubhC0jyWbM
+}
+
+body:json {
+  {
+    "name": "Laptop",
+    "brand": "HP",
+    "model": "Elitebook 8440p",
+    "quantity": 12,
+    "price": 22000,
+    "category": "66d0a8a9b48aebab27f74f5a",
+    "supplier": "66e6f412afff5374d1b9fe69"
+  }
+}

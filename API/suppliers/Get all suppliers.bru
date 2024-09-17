@@ -1,0 +1,15 @@
+meta {
+  name: Get all suppliers
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/api/v1/suppliers
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI2NDA5MzI4LCJleHAiOjE3MjY0OTU3Mjh9.td7c5fKnWD0UsM0R0c6JRfqTLR38SJNiIMzq5d5WxpE
+}

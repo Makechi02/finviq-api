@@ -40,12 +40,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category addCategory(AddUpdateCategoryRequest request) {
-        if (categoryRepository.existsByName(request.name())) {
-            throw new DuplicateResourceException("Category with name " + request.name() + " already exists");
+        if (categoryRepository.existsByName(request.getName())) {
+            throw new DuplicateResourceException("Category with name " + request.getName() + " already exists");
         }
 
         Category category = Category.builder()
-                .name(request.name())
+                .name(request.getName())
                 .build();
         category = categoryRepository.save(category);
         log.info("category saved: {}", category);
@@ -59,12 +59,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         boolean changes = false;
 
-        if (request.name() != null && !request.name().isBlank() && !category.getName().equals(request.name())) {
-            if (categoryRepository.existsByName(request.name())) {
-                throw new DuplicateResourceException("Category with name " + request.name() + " already exists");
+        if (request.getName() != null && !request.getName().isBlank() && !category.getName().equals(request.getName())) {
+            if (categoryRepository.existsByName(request.getName())) {
+                throw new DuplicateResourceException("Category with name " + request.getName() + " already exists");
             }
 
-            category.setName(request.name());
+            category.setName(request.getName());
 
             changes = true;
         }

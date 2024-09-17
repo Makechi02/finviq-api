@@ -35,14 +35,14 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public UserAuthResponse register(UserRegisterRequest request, final HttpServletRequest servletRequest) {
-        boolean existsByEmail = userRepository.existsByEmail(request.email());
+        boolean existsByEmail = userRepository.existsByEmail(request.getEmail());
         if (existsByEmail) throw new DuplicateResourceException("email already taken");
 
         var user = User.builder()
-                .name(request.name())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .role(request.role())
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
                 .build();
 
         user = userRepository.save(user);
@@ -62,9 +62,9 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public UserAuthResponse login(UserLoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),
-                request.password()));
-        var user = userRepository.findByEmail(request.email())
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
+                request.getPassword()));
+        var user = userRepository.findByEmail(request.getPassword())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         var accessToken = jwtService.generateToken(user);

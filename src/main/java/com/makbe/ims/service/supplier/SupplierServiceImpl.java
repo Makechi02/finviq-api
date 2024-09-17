@@ -30,14 +30,14 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier addSupplier(AddUpdateSupplierRequest request) {
-        if (supplierRepository.existsByPhone(request.phone())) {
-            throw new DuplicateResourceException("Supplier with phone " + request.phone() + " already exists");
+        if (supplierRepository.existsByPhone(request.getPhone())) {
+            throw new DuplicateResourceException("Supplier with phone " + request.getPhone() + " already exists");
         }
 
         Supplier supplier = Supplier.builder()
-                .name(request.name())
-                .address(request.address())
-                .phone(request.phone())
+                .name(request.getName())
+                .address(request.getAddress())
+                .phone(request.getPhone())
                 .build();
         return supplierRepository.save(supplier);
     }
@@ -49,22 +49,22 @@ public class SupplierServiceImpl implements SupplierService {
 
         boolean changes = false;
 
-        if (request.name() != null && !request.name().isBlank() && !request.name().equals(supplier.getName())) {
-            supplier.setName(request.name());
+        if (request.getName() != null && !request.getName().isBlank() && !request.getName().equals(supplier.getName())) {
+            supplier.setName(request.getName());
             changes = true;
         }
 
-        if (request.address() != null && !request.address().isBlank() && !request.address().equals(supplier.getAddress())) {
-            supplier.setAddress(request.address());
+        if (request.getAddress() != null && !request.getAddress().isBlank() && !request.getAddress().equals(supplier.getAddress())) {
+            supplier.setAddress(request.getAddress());
             changes = true;
         }
 
-        if (request.phone() != null && !request.phone().isBlank() && !request.phone().equals(supplier.getPhone())) {
-            if (supplierRepository.existsByPhone(request.phone())) {
-                throw new DuplicateResourceException("Supplier with phone " + request.phone() + " already exists");
+        if (request.getPhone() != null && !request.getPhone().isBlank() && !request.getPhone().equals(supplier.getPhone())) {
+            if (supplierRepository.existsByPhone(request.getPhone())) {
+                throw new DuplicateResourceException("Supplier with phone " + request.getPhone() + " already exists");
             }
 
-            supplier.setPhone(request.phone());
+            supplier.setPhone(request.getPhone());
             changes = true;
         }
 

@@ -1,4 +1,10 @@
 package com.makbe.ims.controller.category;
 
-public record AddUpdateCategoryRequest(String name) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class AddUpdateCategoryRequest {
+    private String name;
 }

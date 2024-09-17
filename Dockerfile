@@ -1,12 +1,20 @@
+# Use an official OpenJDK runtime as the base image
 FROM eclipse-temurin:21-jdk-alpine
 LABEL authors="makechi"
 VOLUME /tmp
 
-COPY target/*.jar /app/app.jar
-
+# Set the working directory in the container
 WORKDIR /app
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Copy the pom.xml and download the dependencies
+COPY pom.xml ./
+RUN ./mvnw dependency:go-offline -B
+
+# Copy the rest of the application code
+COPY src ./src
+
+# Package the Spring Boot app using Maven
+RUN ./mvnw package -DskipTests
 
 # Expose the port on which the Spring Boot app will run
 EXPOSE 8080

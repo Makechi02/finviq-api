@@ -1,5 +1,5 @@
 # Use an official OpenJDK runtime as the base image
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:22-jdk-alpine
 LABEL authors="makechi"
 
 # Set the working directory in the container

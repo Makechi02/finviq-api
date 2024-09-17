@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Inventory Management System",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

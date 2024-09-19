@@ -64,7 +64,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public UserAuthResponse login(UserLoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
                 request.getPassword()));
-        var user = userRepository.findByEmail(request.getPassword())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         var accessToken = jwtService.generateToken(user);

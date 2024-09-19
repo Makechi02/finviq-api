@@ -9,9 +9,10 @@ import com.makbe.ims.repository.CategoryRepository;
 import com.makbe.ims.repository.ItemRepository;
 import com.makbe.ims.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,10 @@ public class ItemServiceImpl implements ItemService {
     private final SupplierRepository supplierRepository;
 
     @Override
-    public List<Item> getAllItems() {
-        return itemRepository.findAll();
+    public Page<Item> getAllItems(int page, int size, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return itemRepository.findAll(pageRequest);
     }
 
     @Override

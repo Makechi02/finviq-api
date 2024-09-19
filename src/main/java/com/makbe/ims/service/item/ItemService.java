@@ -2,11 +2,10 @@ package com.makbe.ims.service.item;
 
 import com.makbe.ims.collections.Item;
 import com.makbe.ims.controller.item.AddUpdateItemRequest;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ItemService {
-    List<Item> getAllItems();
+    Page<Item> getAllItems(int page, int size, String sortBy, String sortDirection);
 
     Item getItemById(String id);
 

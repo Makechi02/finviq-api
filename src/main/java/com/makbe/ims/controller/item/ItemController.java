@@ -3,9 +3,8 @@ package com.makbe.ims.controller.item;
 import com.makbe.ims.collections.Item;
 import com.makbe.ims.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/items")
@@ -15,8 +14,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<Item> getAllItems() {
-        return itemService.getAllItems();
+    public Page<Item> getAllItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection
+    ) {
+        return itemService.getAllItems(page, size, sortBy, sortDirection);
     }
 
     @GetMapping("/{id}")

@@ -50,6 +50,10 @@ public class ItemServiceImpl implements ItemService {
             throw new ResourceNotFoundException("Supplier with id " + request.getSupplier() + " not found");
         }
 
+        if (request.getStockAlert() <= 0) {
+            throw new RequestValidationException("Item stock alert can't be zero or below");
+        }
+
         String sku = SKUGenerator.generateSKU(request.getName(), category.getName());
 
         Item item = Item.builder()
@@ -60,6 +64,7 @@ public class ItemServiceImpl implements ItemService {
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
                 .supplier(request.getSupplier())
+                .stockAlert(request.getStockAlert())
                 .sku(sku)
                 .build();
 
@@ -118,6 +123,14 @@ public class ItemServiceImpl implements ItemService {
             }
 
             item.setSupplier(request.getSupplier());
+            changes = true;
+        }
+
+        if (request.getStockAlert() != item.getStockAlert()) {
+            if (request.getStockAlert() <= 0) {
+                throw new RequestValidationException("Item stock alert can't be zero or below");
+            }
+            item.setStockAlert(request.getStockAlert());
             changes = true;
         }
 

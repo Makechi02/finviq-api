@@ -26,6 +26,7 @@ public class Item {
     private double quantity;
     private String sku;
     private String supplier;
+    private int stockAlert;
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @LastModifiedBy

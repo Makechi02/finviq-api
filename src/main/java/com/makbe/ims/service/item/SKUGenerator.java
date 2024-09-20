@@ -10,6 +10,6 @@ public class SKUGenerator {
         String prefix = name != null ? name.substring(0, Math.min(3, name.length())).toUpperCase() : "ITEM";
         String categoryCode = category != null ? category.substring(0, 3).toUpperCase() : "GEN";
         String randomCode = String.format("%04d", new Random().nextInt(10000));
-        return String.format("%s-%s-%s", prefix, categoryCode, randomCode);
+        return String.format("%s-%s-%s", prefix.trim(), categoryCode.trim(), randomCode);
     }
 }

@@ -3,6 +3,7 @@ package com.makbe.ims.service.item;
 import com.makbe.ims.collections.Category;
 import com.makbe.ims.collections.Item;
 import com.makbe.ims.controller.item.AddUpdateItemRequest;
+import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
 import com.makbe.ims.repository.CategoryRepository;
@@ -48,6 +49,20 @@ public class ItemServiceImpl implements ItemService {
 
         if (!supplierRepository.existsById(request.getSupplier())) {
             throw new ResourceNotFoundException("Supplier with id " + request.getSupplier() + " not found");
+        }
+
+        if (itemRepository.existsByName(request.getName())
+                && itemRepository.existsByBrand(request.getBrand())
+                && itemRepository.existsByModel(request.getModel())) {
+            throw new DuplicateResourceException("Item already exists");
+        }
+
+        if (request.getPrice() <= 0) {
+            throw new RequestValidationException("Item price can't be zero or below");
+        }
+
+        if (request.getQuantity() <= 0) {
+            throw new RequestValidationException("Item quantity can't be zero or below");
         }
 
         if (request.getStockAlert() <= 0) {

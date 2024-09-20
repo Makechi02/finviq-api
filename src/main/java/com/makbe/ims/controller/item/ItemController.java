@@ -4,6 +4,8 @@ import com.makbe.ims.collections.Item;
 import com.makbe.ims.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,8 +36,9 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item addItem(@RequestBody AddUpdateItemRequest request) {
-        return itemService.addRequest(request);
+    public ResponseEntity<Item> addItem(@RequestBody AddUpdateItemRequest request) {
+        Item item = itemService.addRequest(request);
+        return new ResponseEntity<>(item, HttpStatusCode.valueOf(201));
     }
 
     @PutMapping("/{id}")

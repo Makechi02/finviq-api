@@ -3,6 +3,8 @@ package com.makbe.ims.service.item;
 import com.makbe.ims.collections.Category;
 import com.makbe.ims.collections.Item;
 import com.makbe.ims.controller.item.AddUpdateItemRequest;
+import com.makbe.ims.dto.item.ItemDto;
+import com.makbe.ims.dto.item.ItemDtoMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
@@ -22,28 +24,32 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final SupplierRepository supplierRepository;
+    private final ItemDtoMapper itemDtoMapper;
 
     @Override
-    public Page<Item> getAllItems(int page, int size, String sortBy, String sortDirection) {
+    public Page<ItemDto> getAllItems(int page, int size, String sortBy, String sortDirection) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-        return itemRepository.findAll(pageRequest);
+        Page<Item> items = itemRepository.findAll(pageRequest);
+        return items.map(itemDtoMapper);
     }
 
     @Override
-    public Item getItemById(String id) {
-        return itemRepository.findById(id)
+    public ItemDto getItemById(String id) {
+        Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
+        return itemDtoMapper.apply(item);
     }
 
     @Override
-    public Item getItemBySku(String sku) {
-        return itemRepository.findBySku(sku)
+    public ItemDto getItemBySku(String sku) {
+        Item item = itemRepository.findBySku(sku)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with SKU " + sku + " not found"));
+        return itemDtoMapper.apply(item);
     }
 
     @Override
-    public Item addRequest(AddUpdateItemRequest request) {
+    public ItemDto addRequest(AddUpdateItemRequest request) {
         Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
@@ -83,11 +89,12 @@ public class ItemServiceImpl implements ItemService {
                 .sku(sku)
                 .build();
 
-        return itemRepository.save(item);
+        item = itemRepository.save(item);
+        return itemDtoMapper.apply(item);
     }
 
     @Override
-    public Item updateItem(String id, AddUpdateItemRequest request) {
+    public ItemDto updateItem(String id, AddUpdateItemRequest request) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
 
@@ -153,7 +160,8 @@ public class ItemServiceImpl implements ItemService {
             throw new RequestValidationException("No data changes");
         }
 
-        return itemRepository.save(item);
+        item = itemRepository.save(item);
+        return itemDtoMapper.apply(item);
     }
 
     @Override

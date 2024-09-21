@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.function.Function;
 
 @Service
-public class UserDtoMapper implements Function<User, UserDto> {
+public class UserMapper implements Function<User, UserDto> {
     @Override
     public UserDto apply(User user) {
         if (user == null) throw new NullPointerException("User should not be null");
@@ -18,6 +18,13 @@ public class UserDtoMapper implements Function<User, UserDto> {
                 .role(user.getRole())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .build();
+    }
+
+    public ItemUserDto toItemUserDto(User user) {
+        return  ItemUserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
                 .build();
     }
 }

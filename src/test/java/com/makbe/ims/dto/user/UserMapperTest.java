@@ -4,15 +4,12 @@ import com.makbe.ims.collections.Role;
 import com.makbe.ims.collections.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-class UserDtoMapperTest {
+class UserMapperTest {
 
     private final User user = User.builder()
             .id("123456789")
@@ -24,17 +21,16 @@ class UserDtoMapperTest {
             .updatedAt(LocalDateTime.now())
             .build();
 
-    @InjectMocks
-    private UserDtoMapper userDtoMapper;
+    private UserMapper userMapper;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        userMapper = new UserMapper();
     }
 
     @Test
     public void shouldMapUserToUserDTO() {
-        UserDto userDto = userDtoMapper.apply(user);
+        UserDto userDto = userMapper.apply(user);
 
         assertEquals(userDto.getId(), user.getId());
         assertEquals(userDto.getEmail(), user.getEmail());
@@ -46,8 +42,17 @@ class UserDtoMapperTest {
 
     @Test
     public void shouldThrowNullPointerExceptionWhenUserIsNull() {
-        var exception = assertThrows(NullPointerException.class, () -> userDtoMapper.apply(null));
+        var exception = assertThrows(NullPointerException.class, () -> userMapper.apply(null));
         assertEquals("User should not be null", exception.getMessage());
+    }
+
+    @Test
+    public void shouldMapUserToItemUserDTO() {
+        ItemUserDto userDto = userMapper.toItemUserDto(user);
+
+        assertNotNull(userDto);
+        assertEquals(userDto.getId(), user.getId());
+        assertEquals(userDto.getName(), user.getName());
     }
 
 }

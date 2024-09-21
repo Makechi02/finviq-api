@@ -5,7 +5,7 @@ import com.makbe.ims.collections.User;
 import com.makbe.ims.controller.user.auth.UserAuthResponse;
 import com.makbe.ims.controller.user.auth.UserLoginRequest;
 import com.makbe.ims.controller.user.auth.UserRegisterRequest;
-import com.makbe.ims.dto.user.UserDtoMapper;
+import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.repository.UserRepository;
 import com.makbe.ims.service.JwtService;
@@ -31,7 +31,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final UserDtoMapper userDtoMapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserAuthResponse register(UserRegisterRequest request, final HttpServletRequest servletRequest) {
@@ -55,7 +55,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .message("Registration Success!")
-                .user(userDtoMapper.apply(user))
+                .user(userMapper.apply(user))
                 .build();
     }
 
@@ -73,7 +73,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .message("Login success")
-                .user(userDtoMapper.apply(user))
+                .user(userMapper.apply(user))
                 .build();
     }
 

@@ -3,7 +3,7 @@ package com.makbe.ims.service.user;
 import com.makbe.ims.collections.User;
 import com.makbe.ims.controller.user.UserUpdateRequest;
 import com.makbe.ims.dto.user.UserDto;
-import com.makbe.ims.dto.user.UserDtoMapper;
+import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
@@ -20,7 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserDtoMapper userDtoMapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,21 +32,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userDtoMapper).toList();
+        return users.stream().map(userMapper).toList();
     }
 
     @Override
     public UserDto getUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
-        return userDtoMapper.apply(user);
+        return userMapper.apply(user);
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " not found"));
-        return userDtoMapper.apply(user);
+        return userMapper.apply(user);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user = userRepository.save(user);
-        return userDtoMapper.apply(user);
+        return userMapper.apply(user);
     }
 
     @Override

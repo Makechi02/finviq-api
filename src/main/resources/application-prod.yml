@@ -1,9 +1,9 @@
 spring:
     data:
         mongodb:
-            uri: ${mongodb-uri}
+            uri: ${MONGODB_URI}
 
 application:
     security:
         jwt:
-            secret-key: ${jwt-secret-key}
+            secret-key: ${JWT_SECRET_KEY}

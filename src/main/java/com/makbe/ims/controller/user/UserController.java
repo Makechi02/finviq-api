@@ -17,6 +17,11 @@ public class UserController {
     @GetMapping
     public List<UserDto> getAllUsers() {
         return  userService.getAllUsers();
+    public List<UserDto> getAllUsers(@RequestParam(value = "query", required = false) String query) {
+        if (query != null && !query.isBlank()) {
+            return userService.getAllUsers(query);
+        }
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")

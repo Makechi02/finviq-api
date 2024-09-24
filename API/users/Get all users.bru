@@ -5,11 +5,15 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/v1/users
+  url: http://localhost:8080/api/v1/users?query=mak
   body: none
   auth: bearer
 }
 
+params:query {
+  query: mak
+}
+
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWtiZUBsb3ZlLmNvbSIsImlhdCI6MTcyNjg1MTA0MywiZXhwIjoxNzI2OTM3NDQzfQ.TxwRLRry_Cv7cUWA4Mag-pGvqDbfP38VV64smNxpyZE
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI3MTU3Nzk5LCJleHAiOjE3MjcyNDQxOTl9.H5wgx4kONaTlEelwQo88q0NX3JqhFXaFzZa3YhrQu5E
 }

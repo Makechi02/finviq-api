@@ -36,6 +36,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllUsers(String query) {
+        List<User> users = userRepository.searchByKeyword(query);
+        return users.stream().map(userMapper).toList();
+    }
+
+    @Override
     public UserDto getUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));

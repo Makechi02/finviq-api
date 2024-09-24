@@ -22,7 +22,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
-        log.info("Total categories: {}", categories.size());
+        log.info("All categories: {}", categories.size());
+        return categories;
+    }
+
+    @Override
+    public List<Category> getAllCategories(String query) {
+        List<Category> categories = categoryRepository.searchByKeyword(query);
+        log.info("Search query: {}", query);
+        log.info("Total categories found: {}", categories.size());
         return categories;
     }
 

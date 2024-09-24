@@ -17,7 +17,10 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public List<Category> getAllCategories(@RequestParam(value = "query", required = false) String query) {
+        if (query != null && !query.isBlank()) {
+            return categoryService.getAllCategories(query);
+        }
         return categoryService.getAllCategories();
     }
 

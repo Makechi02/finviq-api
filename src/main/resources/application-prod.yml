@@ -3,6 +3,9 @@ spring:
         mongodb:
             uri: ${MONGODB_URI}
 
+cors:
+    allowed-origins: "https://inventory-management-system-nu-umber.vercel.app"
+
 application:
     security:
         jwt:

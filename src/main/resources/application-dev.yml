@@ -5,6 +5,9 @@ spring:
             port: 27017
             host: localhost
 
+cors:
+    allowed-origins: "http://localhost:5173"
+
 application:
     security:
         jwt:

@@ -3,6 +3,7 @@ package com.makbe.ims.controller.user;
 import com.makbe.ims.dto.user.UserDto;
 import com.makbe.ims.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
-        return  userService.getAllUsers();
+    @PreAuthorize("hasAuthority('user:read')")
     public List<UserDto> getAllUsers(@RequestParam(value = "query", required = false) String query) {
         if (query != null && !query.isBlank()) {
             return userService.getAllUsers(query);
@@ -25,21 +25,25 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:read')")
     public UserDto getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/email/{email}")
+    @PreAuthorize("hasAuthority('user:read')")
     public UserDto getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:update')")
     public UserDto updateUser(@PathVariable String id, @RequestBody UserUpdateRequest request) {
         return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:delete')")
     public String deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return "User deleted successfully";

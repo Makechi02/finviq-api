@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('item:read')")
     public Page<ItemDto> getAllItems(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -26,27 +28,32 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('item:read')")
     public ItemDto getItemById(@PathVariable String id) {
         return itemService.getItemById(id);
     }
 
     @GetMapping("/sku/{sku}")
+    @PreAuthorize("hasAuthority('item:read')")
     public ItemDto getItemBySku(@PathVariable String sku) {
         return itemService.getItemBySku(sku);
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('item:create')")
     public ResponseEntity<ItemDto> addItem(@RequestBody AddUpdateItemRequest request) {
         ItemDto item = itemService.addRequest(request);
         return new ResponseEntity<>(item, HttpStatusCode.valueOf(201));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('item:update')")
     public ItemDto updateItem(@PathVariable String id, @RequestBody AddUpdateItemRequest request) {
         return itemService.updateItem(id, request);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('item:delete')")
     public String deleteItem(@PathVariable String id) {
         itemService.deleteItem(id);
         return "Item deleted successfully";

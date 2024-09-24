@@ -3,6 +3,7 @@ package com.makbe.ims.controller.supplier;
 import com.makbe.ims.collections.Supplier;
 import com.makbe.ims.service.supplier.SupplierService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/suppliers")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class SupplierController {
 
     private final SupplierService supplierService;

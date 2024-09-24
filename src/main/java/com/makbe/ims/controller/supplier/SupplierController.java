@@ -17,7 +17,10 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping
-    public List<Supplier> getAllSuppliers() {
+    public List<Supplier> getAllSuppliers(@RequestParam(value = "query", required = false) String query) {
+        if (query != null && !query.isBlank()) {
+            return supplierService.getAllSuppliers(query);
+        }
         return supplierService.getAllSuppliers();
     }
 

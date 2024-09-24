@@ -8,6 +8,8 @@ import java.util.List;
 public interface SupplierService {
     List<Supplier> getAllSuppliers();
 
+    List<Supplier> getAllSuppliers(String query);
+
     Supplier getSupplierById(String id);
 
     Supplier addSupplier(AddUpdateSupplierRequest request);
@@ -15,4 +17,5 @@ public interface SupplierService {
     Supplier updateSupplier(String id, AddUpdateSupplierRequest request);
 
     void deleteSupplier(String id);
+
 }

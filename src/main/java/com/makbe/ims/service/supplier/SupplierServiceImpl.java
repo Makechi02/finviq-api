@@ -7,11 +7,13 @@ import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
 import com.makbe.ims.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SupplierServiceImpl implements SupplierService {
 
@@ -19,7 +21,17 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
+        List<Supplier> suppliers = supplierRepository.findAll();
+        log.info("All suppliers: {}", suppliers.size());
+        return suppliers;
+    }
+
+    @Override
+    public List<Supplier> getAllSuppliers(String query) {
+        List<Supplier> suppliers = supplierRepository.searchByKeyword(query);
+        log.info("Search query: {}", query);
+        log.info("Total suppliers found: {}", suppliers.size());
+        return suppliers;
     }
 
     @Override

@@ -19,11 +19,15 @@ public class ItemController {
     @GetMapping
     @PreAuthorize("hasAuthority('item:read')")
     public Page<ItemDto> getAllItems(
+            @RequestParam(value = "query", required = false) String query,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDirection
     ) {
+        if (query != null && !query.isBlank()) {
+            return itemService.getAllItems(page, size, sortBy, sortDirection, query);
+        }
         return itemService.getAllItems(page, size, sortBy, sortDirection);
     }
 

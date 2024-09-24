@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 public interface ItemService {
     Page<ItemDto> getAllItems(int page, int size, String sortBy, String sortDirection);
 
+    Page<ItemDto> getAllItems(int page, int size, String sortBy, String sortDirection, String query);
+
     ItemDto getItemById(String id);
 
     ItemDto getItemBySku(String sku);

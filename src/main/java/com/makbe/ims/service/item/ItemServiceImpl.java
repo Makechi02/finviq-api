@@ -12,12 +12,14 @@ import com.makbe.ims.repository.CategoryRepository;
 import com.makbe.ims.repository.ItemRepository;
 import com.makbe.ims.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
@@ -31,6 +33,17 @@ public class ItemServiceImpl implements ItemService {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<Item> items = itemRepository.findAll(pageRequest);
+        log.info("All items: {}", items.getTotalElements());
+        return items.map(itemDtoMapper);
+    }
+
+    @Override
+    public Page<ItemDto> getAllItems(int page, int size, String sortBy, String sortDirection, String query) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        log.info("Search query: {}", query);
+        Page<Item> items = itemRepository.searchByKeyword(query, pageRequest);
+        log.info("Total items found: {}", items.getTotalElements());
         return items.map(itemDtoMapper);
     }
 

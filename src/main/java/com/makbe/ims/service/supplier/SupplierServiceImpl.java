@@ -2,6 +2,8 @@ package com.makbe.ims.service.supplier;
 
 import com.makbe.ims.collections.Supplier;
 import com.makbe.ims.controller.supplier.AddUpdateSupplierRequest;
+import com.makbe.ims.dto.supplier.SupplierDto;
+import com.makbe.ims.dto.supplier.SupplierDtoMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
@@ -18,30 +20,32 @@ import java.util.List;
 public class SupplierServiceImpl implements SupplierService {
 
     private final SupplierRepository supplierRepository;
+    private final SupplierDtoMapper supplierDtoMapper;
 
     @Override
-    public List<Supplier> getAllSuppliers() {
+    public List<SupplierDto> getAllSuppliers() {
         List<Supplier> suppliers = supplierRepository.findAll();
         log.info("All suppliers: {}", suppliers.size());
-        return suppliers;
+        return suppliers.stream().map(supplierDtoMapper).toList();
     }
 
     @Override
-    public List<Supplier> getAllSuppliers(String query) {
+    public List<SupplierDto> getAllSuppliers(String query) {
         List<Supplier> suppliers = supplierRepository.searchByKeyword(query);
         log.info("Search query: {}", query);
         log.info("Total suppliers found: {}", suppliers.size());
-        return suppliers;
+        return suppliers.stream().map(supplierDtoMapper).toList();
     }
 
     @Override
-    public Supplier getSupplierById(String id) {
-        return supplierRepository.findById(id)
+    public SupplierDto getSupplierById(String id) {
+        Supplier supplier = supplierRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier with id " + id + " not found"));
+        return supplierDtoMapper.apply(supplier);
     }
 
     @Override
-    public Supplier addSupplier(AddUpdateSupplierRequest request) {
+    public SupplierDto addSupplier(AddUpdateSupplierRequest request) {
         if (supplierRepository.existsByPhone(request.getPhone())) {
             throw new DuplicateResourceException("Supplier with phone " + request.getPhone() + " already exists");
         }
@@ -51,11 +55,12 @@ public class SupplierServiceImpl implements SupplierService {
                 .address(request.getAddress())
                 .phone(request.getPhone())
                 .build();
-        return supplierRepository.save(supplier);
+        supplier = supplierRepository.save(supplier);
+        return supplierDtoMapper.apply(supplier);
     }
 
     @Override
-    public Supplier updateSupplier(String id, AddUpdateSupplierRequest request) {
+    public SupplierDto updateSupplier(String id, AddUpdateSupplierRequest request) {
         Supplier supplier = supplierRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier with id " + id + " not found"));
 
@@ -85,7 +90,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         supplier = supplierRepository.save(supplier);
-        return supplier;
+        return supplierDtoMapper.apply(supplier);
     }
 
     @Override

@@ -47,12 +47,18 @@ class UserMapperTest {
     }
 
     @Test
-    public void shouldMapUserToItemUserDTO() {
-        ItemUserDto userDto = userMapper.toItemUserDto(user);
+    public void shouldMapUserToModelUserDTO() {
+        ModelUserDto userDto = userMapper.toModelUserDto(user);
 
         assertNotNull(userDto);
         assertEquals(userDto.getId(), user.getId());
         assertEquals(userDto.getName(), user.getName());
+    }
+
+    @Test
+    public void shouldThrowNullPointerExceptionWhenUserIsNullToModelUserDto() {
+        var exception = assertThrows(NullPointerException.class, () -> userMapper.toModelUserDto(null));
+        assertEquals("User should not be null", exception.getMessage());
     }
 
 }

@@ -2,6 +2,8 @@ package com.makbe.ims.service.category;
 
 import com.makbe.ims.collections.Category;
 import com.makbe.ims.controller.category.AddUpdateCategoryRequest;
+import com.makbe.ims.dto.category.CategoryDto;
+import com.makbe.ims.dto.category.CategoryDtoMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
 import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
@@ -18,36 +20,39 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryDtoMapper categoryDtoMapper;
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         log.info("All categories: {}", categories.size());
-        return categories;
+        return categories.stream().map(categoryDtoMapper).toList();
     }
 
     @Override
-    public List<Category> getAllCategories(String query) {
+    public List<CategoryDto> getAllCategories(String query) {
         List<Category> categories = categoryRepository.searchByKeyword(query);
         log.info("Search query: {}", query);
         log.info("Total categories found: {}", categories.size());
-        return categories;
+        return categories.stream().map(categoryDtoMapper).toList();
     }
 
     @Override
-    public Category getCategoryById(String id) {
-        return categoryRepository.findById(id)
+    public CategoryDto getCategoryById(String id) {
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
+        return categoryDtoMapper.apply(category);
     }
 
     @Override
-    public Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name)
+    public CategoryDto getCategoryByName(String name) {
+        Category category = categoryRepository.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with name " + name + " not found"));
+        return categoryDtoMapper.apply(category);
     }
 
     @Override
-    public Category addCategory(AddUpdateCategoryRequest request) {
+    public CategoryDto addCategory(AddUpdateCategoryRequest request) {
         if (categoryRepository.existsByName(request.getName())) {
             throw new DuplicateResourceException("Category with name " + request.getName() + " already exists");
         }
@@ -57,11 +62,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
         category = categoryRepository.save(category);
         log.info("category saved: {}", category);
-        return category;
+        return categoryDtoMapper.apply(category);
     }
 
     @Override
-    public Category updateCategory(String id, AddUpdateCategoryRequest request) {
+    public CategoryDto updateCategory(String id, AddUpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
 
@@ -81,7 +86,8 @@ public class CategoryServiceImpl implements CategoryService {
             throw new RequestValidationException("No Data changes");
         }
 
-        return categoryRepository.save(category);
+        category = categoryRepository.save(category);
+        return categoryDtoMapper.apply(category);
     }
 
     @Override

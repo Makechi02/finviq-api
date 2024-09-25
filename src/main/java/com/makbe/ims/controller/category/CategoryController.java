@@ -1,6 +1,6 @@
 package com.makbe.ims.controller.category;
 
-import com.makbe.ims.collections.Category;
+import com.makbe.ims.dto.category.CategoryDto;
 import com.makbe.ims.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +17,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories(@RequestParam(value = "query", required = false) String query) {
+    public List<CategoryDto> getAllCategories(@RequestParam(value = "query", required = false) String query) {
         if (query != null && !query.isBlank()) {
             return categoryService.getAllCategories(query);
         }
@@ -25,22 +25,22 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable String id) {
+    public CategoryDto getCategoryById(@PathVariable String id) {
         return categoryService.getCategoryById(id);
     }
 
     @GetMapping("/name/{name}")
-    public Category getCategoryByName(@PathVariable String name) {
+    public CategoryDto getCategoryByName(@PathVariable String name) {
         return categoryService.getCategoryByName(name);
     }
 
     @PostMapping
-    public Category addCategory(@RequestBody AddUpdateCategoryRequest request) {
+    public CategoryDto addCategory(@RequestBody AddUpdateCategoryRequest request) {
         return categoryService.addCategory(request);
     }
 
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable String id, @RequestBody AddUpdateCategoryRequest request) {
+    public CategoryDto updateCategory(@PathVariable String id, @RequestBody AddUpdateCategoryRequest request) {
         return categoryService.updateCategory(id, request);
     }
 

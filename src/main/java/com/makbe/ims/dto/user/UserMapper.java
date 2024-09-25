@@ -21,8 +21,10 @@ public class UserMapper implements Function<User, UserDto> {
                 .build();
     }
 
-    public ItemUserDto toItemUserDto(User user) {
-        return  ItemUserDto.builder()
+    public ModelUserDto toModelUserDto(User user) {
+        if (user == null) throw new NullPointerException("User should not be null");
+
+        return  ModelUserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .build();

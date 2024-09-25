@@ -1,22 +1,22 @@
 package com.makbe.ims.service.category;
 
-import com.makbe.ims.collections.Category;
 import com.makbe.ims.controller.category.AddUpdateCategoryRequest;
+import com.makbe.ims.dto.category.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
+    List<CategoryDto> getAllCategories();
 
-    List<Category> getAllCategories(String query);
+    List<CategoryDto> getAllCategories(String query);
 
-    Category getCategoryById(String id);
+    CategoryDto getCategoryById(String id);
 
-    Category getCategoryByName(String name);
+    CategoryDto getCategoryByName(String name);
 
-    Category addCategory(AddUpdateCategoryRequest request);
+    CategoryDto addCategory(AddUpdateCategoryRequest request);
 
-    Category updateCategory(String id, AddUpdateCategoryRequest request);
+    CategoryDto updateCategory(String id, AddUpdateCategoryRequest request);
 
     void deleteCategoryById(String id);
 }

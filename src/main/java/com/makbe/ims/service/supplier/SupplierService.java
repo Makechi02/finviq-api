@@ -1,20 +1,20 @@
 package com.makbe.ims.service.supplier;
 
-import com.makbe.ims.collections.Supplier;
 import com.makbe.ims.controller.supplier.AddUpdateSupplierRequest;
+import com.makbe.ims.dto.supplier.SupplierDto;
 
 import java.util.List;
 
 public interface SupplierService {
-    List<Supplier> getAllSuppliers();
+    List<SupplierDto> getAllSuppliers();
 
-    List<Supplier> getAllSuppliers(String query);
+    List<SupplierDto> getAllSuppliers(String query);
 
-    Supplier getSupplierById(String id);
+    SupplierDto getSupplierById(String id);
 
-    Supplier addSupplier(AddUpdateSupplierRequest request);
+    SupplierDto addSupplier(AddUpdateSupplierRequest request);
 
-    Supplier updateSupplier(String id, AddUpdateSupplierRequest request);
+    SupplierDto updateSupplier(String id, AddUpdateSupplierRequest request);
 
     void deleteSupplier(String id);
 

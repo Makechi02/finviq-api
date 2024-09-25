@@ -4,9 +4,9 @@ import com.makbe.ims.collections.Item;
 import com.makbe.ims.dto.category.CategoryDtoMapper;
 import com.makbe.ims.dto.supplier.SupplierDtoMapper;
 import com.makbe.ims.dto.user.UserMapper;
+import com.makbe.ims.repository.CategoryRepository;
+import com.makbe.ims.repository.SupplierRepository;
 import com.makbe.ims.repository.UserRepository;
-import com.makbe.ims.service.category.CategoryService;
-import com.makbe.ims.service.supplier.SupplierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +17,18 @@ import java.util.function.Function;
 public class ItemDtoMapper implements Function<Item, ItemDto> {
 
     private final UserRepository userRepository;
-    private final CategoryService categoryService;
-    private final SupplierService supplierService;
+    private final CategoryRepository categoryRepository;
+    private final SupplierRepository supplierRepository;
     private final CategoryDtoMapper categoryDtoMapper;
     private final SupplierDtoMapper supplierDtoMapper;
     private final UserMapper userMapper;
 
     @Override
     public ItemDto apply(Item item) {
-        var createdBy = userMapper.toItemUserDto(userRepository.findById(item.getCreatedBy()).orElseThrow());
-        var updatedBy = userMapper.toItemUserDto(userRepository.findById(item.getUpdatedBy()).orElseThrow());
-        var supplier = supplierDtoMapper.apply(supplierService.getSupplierById(item.getSupplier()));
-        var category = categoryDtoMapper.apply(categoryService.getCategoryById(item.getCategory()));
+        var createdBy = userMapper.toModelUserDto(userRepository.findById(item.getCreatedBy()).orElseThrow());
+        var updatedBy = userMapper.toModelUserDto(userRepository.findById(item.getUpdatedBy()).orElseThrow());
+        var supplier = supplierDtoMapper.toModelSupplierDto(supplierRepository.findById(item.getSupplier()).orElseThrow());
+        var category = categoryDtoMapper.toModelCategoryDto(categoryRepository.findById(item.getCategory()).orElseThrow());
 
         return ItemDto.builder()
                 .id(item.getId())

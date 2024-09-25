@@ -1,6 +1,6 @@
 package com.makbe.ims.controller.supplier;
 
-import com.makbe.ims.collections.Supplier;
+import com.makbe.ims.dto.supplier.SupplierDto;
 import com.makbe.ims.service.supplier.SupplierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +17,7 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping
-    public List<Supplier> getAllSuppliers(@RequestParam(value = "query", required = false) String query) {
+    public List<SupplierDto> getAllSuppliers(@RequestParam(value = "query", required = false) String query) {
         if (query != null && !query.isBlank()) {
             return supplierService.getAllSuppliers(query);
         }
@@ -25,17 +25,17 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public Supplier getSupplierById(@PathVariable String id) {
+    public SupplierDto getSupplierById(@PathVariable String id) {
         return supplierService.getSupplierById(id);
     }
 
     @PostMapping()
-    public Supplier addSupplier(@RequestBody AddUpdateSupplierRequest request) {
+    public SupplierDto addSupplier(@RequestBody AddUpdateSupplierRequest request) {
         return supplierService.addSupplier(request);
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable String id, @RequestBody AddUpdateSupplierRequest request) {
+    public SupplierDto updateSupplier(@PathVariable String id, @RequestBody AddUpdateSupplierRequest request) {
         return supplierService.updateSupplier(id, request);
     }
 

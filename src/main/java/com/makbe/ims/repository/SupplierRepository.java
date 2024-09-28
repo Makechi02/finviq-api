@@ -11,4 +11,6 @@ public interface SupplierRepository extends MongoRepository<Supplier, String> {
 
     @Query("{'$or': [{'name': {'$regex': ?0, '$options': 'i'}}, {'address': {'$regex': ?0, '$options': 'i'}}, {'phone': {'$regex': ?0, '$options': 'i'}}]}")
     List<Supplier> searchByKeyword(String query);
+
+    List<Supplier> findTop5ByOrderByAddedAtDesc();
 }

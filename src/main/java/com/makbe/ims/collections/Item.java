@@ -1,7 +1,9 @@
 package com.makbe.ims.collections;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Document(collection = "items")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @Id

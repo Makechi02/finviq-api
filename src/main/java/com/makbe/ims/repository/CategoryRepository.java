@@ -15,4 +15,6 @@ public interface CategoryRepository extends MongoRepository<Category, String> {
 
     @Query("{'$or': [{'name': {'$regex': ?0, '$options': 'i'}}]}")
     List<Category> searchByKeyword(String query);
+
+    List<Category> findTop5ByOrderByCreatedAtDesc();
 }

@@ -14,4 +14,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{'$or': [{'name': {'$regex': ?0, '$options': 'i'}}, {'email': {'$regex': ?0, '$options': 'i'}}, {'role': {'$regex': ?0, '$options': 'i'}}]}")
     List<User> searchByKeyword(String keyword);
+
+    List<User> findTop5ByOrderByCreatedAtDesc();
 }

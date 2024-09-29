@@ -2,6 +2,7 @@ package com.makbe.ims.collections;
 
 import lombok.Builder;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,9 +20,9 @@ public class Supplier {
     @CreatedDate
     private LocalDateTime addedAt;
     @CreatedBy
-    private String addedBy;
+    private ObjectId addedBy;
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @LastModifiedBy
-    private String updatedBy;
+    private ObjectId updatedBy;
 }

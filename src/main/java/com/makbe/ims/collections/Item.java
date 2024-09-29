@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,20 +20,20 @@ public class Item {
     @Id
     private String id;
     private String brand;
-    private String category;
+    private ObjectId category;
     @CreatedDate
     private LocalDateTime createdAt;
     @CreatedBy
-    private String createdBy;
+    private ObjectId createdBy;
     private String model;
     private String name;
     private double price;
     private double quantity;
     private String sku;
-    private String supplier;
+    private ObjectId supplier;
     private int stockAlert;
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @LastModifiedBy
-    private String updatedBy;
+    private ObjectId updatedBy;
 }

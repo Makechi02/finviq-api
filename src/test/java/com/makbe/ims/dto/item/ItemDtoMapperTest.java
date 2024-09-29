@@ -13,6 +13,7 @@ import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.repository.CategoryRepository;
 import com.makbe.ims.repository.SupplierRepository;
 import com.makbe.ims.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -57,10 +58,10 @@ class ItemDtoMapperTest {
                 .quantity(10)
                 .sku("S21-001")
                 .stockAlert(5)
-                .createdBy("user123")
-                .updatedBy("user124")
-                .category("category123")
-                .supplier("supplier123")
+                .createdBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .category(new ObjectId("66d0a8a9b48aebab27f74f5a"))
+                .supplier(new ObjectId("66f91601e9b4cd6e76c4fd1c"))
                 .build();
 
         User mockUser = mock(User.class);
@@ -71,10 +72,9 @@ class ItemDtoMapperTest {
         var mockCategoryDto = Mockito.mock(ModelCategoryDto.class);
         var mockSupplierDto = Mockito.mock(ModelSupplierDto.class);
 
-        when(userRepository.findById("user123")).thenReturn(Optional.of(mockUser));
-        when(userRepository.findById("user124")).thenReturn(Optional.of(mockUser));
-        when(categoryRepository.findById("category123")).thenReturn(Optional.of(mockCategory));
-        when(supplierRepository.findById("supplier123")).thenReturn(Optional.of(mockSupplier));
+        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
+        when(categoryRepository.findById("66d0a8a9b48aebab27f74f5a")).thenReturn(Optional.of(mockCategory));
+        when(supplierRepository.findById("66f91601e9b4cd6e76c4fd1c")).thenReturn(Optional.of(mockSupplier));
 
         when(userMapper.toModelUserDto(mockUser)).thenReturn(mockCreatedByDto).thenReturn(mockUpdatedByDto);
         when(categoryDtoMapper.toModelCategoryDto(mockCategory)).thenReturn(mockCategoryDto);

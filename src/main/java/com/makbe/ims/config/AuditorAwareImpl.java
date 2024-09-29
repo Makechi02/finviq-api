@@ -3,6 +3,7 @@ package com.makbe.ims.config;
 import com.makbe.ims.collections.User;
 import com.makbe.ims.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,16 +13,16 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class AuditorAwareImpl implements AuditorAware<String> {
+public class AuditorAwareImpl implements AuditorAware<ObjectId> {
 
     private final UserRepository userRepository;
 
     @Override
-    public Optional<String> getCurrentAuditor() {
+    public Optional<ObjectId> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            User user = userRepository.findByEmail(authentication.getName()).get();
-            return Optional.of(user.getId());
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
+            return Optional.of(new ObjectId(user.getId()));
         }
 
         return Optional.empty();

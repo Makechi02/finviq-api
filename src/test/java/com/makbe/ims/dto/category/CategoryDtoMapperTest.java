@@ -5,6 +5,7 @@ import com.makbe.ims.collections.User;
 import com.makbe.ims.dto.user.ModelUserDto;
 import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,13 +35,13 @@ class CategoryDtoMapperTest {
         Category category = Category.builder()
                 .id("123")
                 .name("electronics")
-                .createdBy("user123")
-                .updatedBy("user123")
+                .createdBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .build();
 
         User mockUser = mock(User.class);
 
-        when(userRepository.findById("user123")).thenReturn(Optional.of(mockUser));
+        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
 
         when(userMapper.toModelUserDto(mockUser)).thenReturn(Mockito.mock(ModelUserDto.class));
 
@@ -62,13 +63,13 @@ class CategoryDtoMapperTest {
         Category category = Category.builder()
                 .id(null)
                 .name(null)
-                .createdBy("user123")
-                .updatedBy("user123")
+                .createdBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .build();
 
         User mockUser = mock(User.class);
 
-        when(userRepository.findById("user123")).thenReturn(Optional.of(mockUser));
+        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
 
         when(userMapper.toModelUserDto(mockUser)).thenReturn(Mockito.mock(ModelUserDto.class));
 

@@ -13,6 +13,7 @@ import com.makbe.ims.repository.ItemRepository;
 import com.makbe.ims.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -92,12 +93,12 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = Item.builder()
                 .brand(request.getBrand())
-                .category(request.getCategory())
+                .category(new ObjectId(request.getCategory()))
                 .model(request.getModel())
                 .name(request.getName())
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
-                .supplier(request.getSupplier())
+                .supplier(new ObjectId(request.getSupplier()))
                 .stockAlert(request.getStockAlert())
                 .sku(sku)
                 .build();
@@ -118,11 +119,11 @@ public class ItemServiceImpl implements ItemService {
             changes = true;
         }
 
-        if (request.getCategory() != null && !request.getCategory().isBlank() && !request.getCategory().equals(item.getCategory())) {
+        if (request.getCategory() != null && !request.getCategory().isBlank() && !new ObjectId(request.getCategory()).equals(item.getCategory())) {
             Category category = categoryRepository.findById(request.getCategory())
                     .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
-            item.setCategory(category.getId());
+            item.setCategory(new ObjectId(category.getId()));
             changes = true;
         }
 
@@ -152,12 +153,12 @@ public class ItemServiceImpl implements ItemService {
             changes = true;
         }
 
-        if (request.getSupplier() != null && !request.getSupplier().isBlank() && !request.getSupplier().equals(item.getSupplier())) {
+        if (request.getSupplier() != null && !request.getSupplier().isBlank() && !new ObjectId(request.getSupplier()).equals(item.getSupplier())) {
             if (!supplierRepository.existsById(request.getSupplier())) {
                 throw new ResourceNotFoundException("Supplier with id " + request.getSupplier() + " not found");
             }
 
-            item.setSupplier(request.getSupplier());
+            item.setSupplier(new ObjectId(request.getSupplier()));
             changes = true;
         }
 

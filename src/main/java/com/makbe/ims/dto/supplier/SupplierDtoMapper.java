@@ -20,8 +20,8 @@ public class SupplierDtoMapper implements Function<Supplier, SupplierDto> {
         if (supplier == null)
             throw new NullPointerException("Supplier should not be null");
 
-        var addedBy = userMapper.toModelUserDto(userRepository.findById(supplier.getAddedBy()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(supplier.getUpdatedBy()).orElseThrow());
+        var addedBy = userMapper.toModelUserDto(userRepository.findById(supplier.getAddedBy().toString()).orElseThrow());
+        var updatedBy = userMapper.toModelUserDto(userRepository.findById(supplier.getUpdatedBy().toString()).orElseThrow());
 
         return SupplierDto.builder()
                 .id(supplier.getId())

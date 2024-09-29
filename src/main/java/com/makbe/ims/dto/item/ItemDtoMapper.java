@@ -25,10 +25,10 @@ public class ItemDtoMapper implements Function<Item, ItemDto> {
 
     @Override
     public ItemDto apply(Item item) {
-        var createdBy = userMapper.toModelUserDto(userRepository.findById(item.getCreatedBy()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(item.getUpdatedBy()).orElseThrow());
-        var supplier = supplierDtoMapper.toModelSupplierDto(supplierRepository.findById(item.getSupplier()).orElseThrow());
-        var category = categoryDtoMapper.toModelCategoryDto(categoryRepository.findById(item.getCategory()).orElseThrow());
+        var createdBy = userMapper.toModelUserDto(userRepository.findById(item.getCreatedBy().toString()).orElseThrow());
+        var updatedBy = userMapper.toModelUserDto(userRepository.findById(item.getUpdatedBy().toString()).orElseThrow());
+        var supplier = supplierDtoMapper.toModelSupplierDto(supplierRepository.findById(item.getSupplier().toString()).orElseThrow());
+        var category = categoryDtoMapper.toModelCategoryDto(categoryRepository.findById(item.getCategory().toString()).orElseThrow());
 
         return ItemDto.builder()
                 .id(item.getId())

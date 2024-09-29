@@ -20,8 +20,8 @@ public class CategoryDtoMapper implements Function<Category, CategoryDto> {
         if (category == null)
             throw new NullPointerException("Category should not be null");
 
-        var createdBy = userMapper.toModelUserDto(userRepository.findById(category.getCreatedBy()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(category.getUpdatedBy()).orElseThrow());
+        var createdBy = userMapper.toModelUserDto(userRepository.findById(category.getCreatedBy().toString()).orElseThrow());
+        var updatedBy = userMapper.toModelUserDto(userRepository.findById(category.getUpdatedBy().toString()).orElseThrow());
 
         return CategoryDto.builder()
                 .id(category.getId())

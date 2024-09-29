@@ -5,6 +5,7 @@ import com.makbe.ims.collections.User;
 import com.makbe.ims.dto.user.ModelUserDto;
 import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -35,16 +36,15 @@ class SupplierDtoMapperTest {
                 .name("ABC Suppliers")
                 .address("123 Market Street")
                 .phone("0712345678")
-                .addedBy("user123")
-                .updatedBy("user124")
+                .addedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .build();
 
         User mockUser = mock(User.class);
         var mockAddedByDto = Mockito.mock(ModelUserDto.class);
         var mockUpdatedByDto = Mockito.mock(ModelUserDto.class);
 
-        when(userRepository.findById("user123")).thenReturn(Optional.of(mockUser));
-        when(userRepository.findById("user124")).thenReturn(Optional.of(mockUser));
+        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
         when(userMapper.toModelUserDto(mockUser)).thenReturn(mockAddedByDto).thenReturn(mockUpdatedByDto);
 
         SupplierDto supplierDto = supplierDtoMapper.apply(supplier);

@@ -2,11 +2,14 @@ package com.makbe.ims.service.user.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makbe.ims.collections.User;
+import com.makbe.ims.controller.user.UpdatePasswordRequest;
 import com.makbe.ims.controller.user.auth.UserAuthResponse;
 import com.makbe.ims.controller.user.auth.UserLoginRequest;
 import com.makbe.ims.controller.user.auth.UserRegisterRequest;
 import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.exception.DuplicateResourceException;
+import com.makbe.ims.exception.RequestValidationException;
+import com.makbe.ims.exception.ResourceNotFoundException;
 import com.makbe.ims.repository.UserRepository;
 import com.makbe.ims.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,6 +81,41 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
+    public UserAuthResponse updatePassword(String id, UpdatePasswordRequest request) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("user not found"));
+
+        boolean changes = false;
+
+        if (
+                (request.currentPassword() != null && !request.currentPassword().isBlank()) &&
+                (request.newPassword() != null && !request.newPassword().isBlank())
+        ) {
+            if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+                throw new RequestValidationException("Incorrect password");
+            }
+
+            user.setPassword(passwordEncoder.encode(request.newPassword()));
+            changes = true;
+        }
+
+        if (!changes) {
+            throw new RequestValidationException("No data changes");
+        }
+
+        user = userRepository.save(user);
+
+        var accessToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        return UserAuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .message("Update password success")
+                .user(userMapper.apply(user))
+                .build();
+    }
+
+    @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -100,5 +138,4 @@ public class UserAuthServiceImpl implements UserAuthService {
             }
         }
     }
-
 }

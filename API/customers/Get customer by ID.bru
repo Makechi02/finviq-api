@@ -1,0 +1,15 @@
+meta {
+  name: Get customer by ID
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8080/api/v1/customers/6702783053c46f5fb4fbe9f8
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI4MjE0ODU2LCJleHAiOjE3MjgzMDEyNTZ9.NstmaG5vkZL1QcrqvltFSEJVtJ4gFwIXxqTANjELZ9U
+}

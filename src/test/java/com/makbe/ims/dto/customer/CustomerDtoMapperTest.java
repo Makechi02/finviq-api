@@ -1,0 +1,64 @@
+package com.makbe.ims.dto.customer;
+
+import com.makbe.ims.collections.Customer;
+import com.makbe.ims.collections.User;
+import com.makbe.ims.dto.user.ModelUserDto;
+import com.makbe.ims.dto.user.UserMapper;
+import com.makbe.ims.repository.UserRepository;
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class CustomerDtoMapperTest {
+
+    private CustomerDtoMapper customerDtoMapper;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
+
+    @BeforeEach
+    void setUp() {
+        userMapper = mock(UserMapper.class);
+        userRepository = mock(UserRepository.class);
+
+        customerDtoMapper = new CustomerDtoMapper(userRepository, userMapper);
+    }
+
+    @Test
+    void shouldMapCustomerToCustomerDto() {
+        Customer customer = Customer.builder()
+                .id("6702fab431a8c90a64446a37")
+                .name("Kenya Supermarket Ltd.")
+                .contactPerson("John Doe")
+                .email("john@kenyasupermarket.com")
+                .phone("+254712345678")
+                .address("Moi Avenue, Nairobi")
+                .addedBy(new ObjectId("670258595df0332b7901a83a"))
+                .addedAt(LocalDateTime.now())
+                .updatedBy(new ObjectId("670258595df0332b7901a83a"))
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        User user = mock(User.class);
+        when(userRepository.findById("670258595df0332b7901a83a")).thenReturn(Optional.of(user));
+        when(userMapper.toModelUserDto(user)).thenReturn(mock(ModelUserDto.class));
+
+        CustomerDto customerDto = customerDtoMapper.apply(customer);
+        assertNotNull(customerDto);
+        assertEquals("6702fab431a8c90a64446a37", customerDto.getId());
+        assertEquals("Kenya Supermarket Ltd.", customerDto.getName());
+        assertEquals("John Doe", customerDto.getContactPerson());
+        assertEquals("john@kenyasupermarket.com", customerDto.getEmail());
+        assertEquals("+254712345678", customerDto.getPhone());
+        assertEquals("Moi Avenue, Nairobi", customerDto.getAddress());
+        assertEquals(customer.getAddedAt(), customerDto.getAddedAt());
+        assertEquals(customer.getUpdatedAt(), customerDto.getUpdatedAt());
+    }
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Update customer
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8080/api/v1/customers/6702783053c46f5fb4fbe9f8
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI4MjQ4MDA4LCJleHAiOjE3MjgzMzQ0MDh9.EezA3axmZFd0rBo0RXl9ucLmebVLMC0Ew5oYP3AB6zA
+}
+
+body:json {
+  {
+    "name": "Kenya Supermarkets Ltd",
+    "contactPerson": "John Doe",
+    "email": "john@kenyasupermarket.com",
+    "phone": "+254712345678",
+    "address": "Moi Avenue, Nairobi"
+  }
+  
+}

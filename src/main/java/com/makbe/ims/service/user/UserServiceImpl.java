@@ -62,22 +62,22 @@ public class UserServiceImpl implements UserService {
 
         boolean changes = false;
 
-        if (request.getName() != null && !request.getName().isBlank() && !request.getName().equals(user.getName())) {
-            user.setName(request.getName());
+        if (request.name() != null && !request.name().isBlank() && !request.name().equals(user.getName())) {
+            user.setName(request.name());
             changes = true;
         }
 
-        if (request.getEmail() != null && !request.getEmail().isBlank() && !request.getEmail().equals(user.getEmail())) {
-            if (userRepository.existsByEmail(request.getEmail())) {
-                throw new DuplicateResourceException("User with email " + request.getEmail() + " already exists");
+        if (request.email() != null && !request.email().isBlank() && !request.email().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(request.email())) {
+                throw new DuplicateResourceException("User with email " + request.email() + " already exists");
             }
 
-            user.setEmail(request.getEmail());
+            user.setEmail(request.email());
             changes = true;
         }
 
-        if (request.getRole() != null && !request.getRole().equals(user.getRole())) {
-            user.setRole(request.getRole());
+        if (request.role() != null && !request.role().equals(user.getRole())) {
+            user.setRole(request.role());
             changes = true;
         }
 

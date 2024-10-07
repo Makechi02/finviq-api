@@ -33,4 +33,11 @@ public class CustomerDtoMapper implements Function<Customer, CustomerDto> {
                 .updatedAt(customer.getUpdatedAt())
                 .build();
     }
+
+    public ModelCustomerDto toModelCustomerDto(Customer customer) {
+        if (customer == null)
+            throw new NullPointerException("Customer should not be null");
+
+        return new ModelCustomerDto(customer.getId(), customer.getName());
+    }
 }

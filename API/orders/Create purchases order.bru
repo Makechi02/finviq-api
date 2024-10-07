@@ -1,0 +1,27 @@
+meta {
+  name: Create purchases order
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/api/v1/orders/purchases
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI4MjQzNDA0LCJleHAiOjE3MjgzMjk4MDR9.AuKc6wCOnrkVamPWhZsbN_ok9iDYF5aYrgWY6PuDAe0
+}
+
+body:json {
+  {
+    "userId": "6702c5fe3969533b2f0ff595",
+    "orderItems": [
+      {
+        "itemId": "6702c6be3969533b2f0ff597",
+        "quantity": 20
+      }
+    ]
+  }
+}

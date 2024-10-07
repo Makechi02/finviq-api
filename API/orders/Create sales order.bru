@@ -1,11 +1,11 @@
 meta {
-  name: Update category
+  name: Create sales order
   type: http
-  seq: 4
+  seq: 1
 }
 
-put {
-  url: http://localhost:8080/api/v1/categories/67025ac415fe1c74664a37c6
+post {
+  url: http://localhost:8080/api/v1/orders/sales
   body: json
   auth: bearer
 }
@@ -16,6 +16,12 @@ auth:bearer {
 
 body:json {
   {
-    "name": "electronics"
+    "userId": "6702fab431a8c90a64446a37",
+    "orderItems": [
+      {
+        "itemId": "6702c6be3969533b2f0ff597",
+        "quantity": 5
+      }
+    ]
   }
 }

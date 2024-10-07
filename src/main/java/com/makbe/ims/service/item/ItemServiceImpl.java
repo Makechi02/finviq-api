@@ -186,4 +186,25 @@ public class ItemServiceImpl implements ItemService {
 
         itemRepository.deleteById(id);
     }
+
+    @Override
+    public void increaseStock(String id, int quantity) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
+
+        item.setQuantity(item.getQuantity() + quantity);
+        itemRepository.save(item);
+    }
+
+    @Override
+    public void decreaseStock(String id, int quantity) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
+
+        if (item.getQuantity() < quantity) {
+            throw new RequestValidationException("Insufficient stock");
+        }
+        item.setQuantity(item.getQuantity() - quantity);
+        itemRepository.save(item);
+    }
 }

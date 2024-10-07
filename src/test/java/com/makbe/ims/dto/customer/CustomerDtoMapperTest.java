@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -60,5 +59,29 @@ class CustomerDtoMapperTest {
         assertEquals("Moi Avenue, Nairobi", customerDto.getAddress());
         assertEquals(customer.getAddedAt(), customerDto.getAddedAt());
         assertEquals(customer.getUpdatedAt(), customerDto.getUpdatedAt());
+    }
+
+    @Test
+    void shouldMapCustomerToModelCustomerDto() {
+        Customer customer = Customer.builder()
+                .id("6702fab431a8c90a64446a37")
+                .name("Kenya Supermarkets Ltd")
+                .contactPerson("John Doe")
+                .email("john@kenyasupermarket.com")
+                .phone("+254712345678")
+                .address("Moi Avenue, Nairobi")
+                .build();
+
+        ModelCustomerDto modelSupplierDto = customerDtoMapper.toModelCustomerDto(customer);
+
+        assertNotNull(modelSupplierDto);
+        assertEquals("6702fab431a8c90a64446a37", modelSupplierDto.id());
+        assertEquals("Kenya Supermarkets Ltd", modelSupplierDto.name());
+    }
+
+    @Test
+    public void shouldThrowNullPointerExceptionWhenCustomerIsNullInModelMapping() {
+        var exception = assertThrows(NullPointerException.class, () -> customerDtoMapper.toModelCustomerDto(null));
+        assertEquals("Customer should not be null", exception.getMessage());
     }
 }

@@ -18,4 +18,8 @@ public interface ItemService {
     ItemDto updateItem(String id, AddUpdateItemRequest request);
 
     void deleteItem(String id);
+
+    void increaseStock(String id, int quantity);
+
+    void decreaseStock(String id, int quantity);
 }

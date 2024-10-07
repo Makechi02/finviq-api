@@ -1,0 +1,15 @@
+meta {
+  name: Delete order
+  type: http
+  seq: 6
+}
+
+delete {
+  url: http://localhost:8080/api/v1/orders/6702cb2853193073d4559070
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI4MjQzNDA0LCJleHAiOjE3MjgzMjk4MDR9.AuKc6wCOnrkVamPWhZsbN_ok9iDYF5aYrgWY6PuDAe0
+}

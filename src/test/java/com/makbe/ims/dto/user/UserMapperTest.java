@@ -48,11 +48,11 @@ class UserMapperTest {
 
     @Test
     public void shouldMapUserToModelUserDTO() {
-        ModelUserDto userDto = userMapper.toModelUserDto(user);
+        ModelUserDto modelUserDto = userMapper.toModelUserDto(user);
 
-        assertNotNull(userDto);
-        assertEquals(userDto.getId(), user.getId());
-        assertEquals(userDto.getName(), user.getName());
+        assertNotNull(modelUserDto);
+        assertEquals(modelUserDto.id(), user.getId());
+        assertEquals(modelUserDto.name(), user.getName());
     }
 
     @Test

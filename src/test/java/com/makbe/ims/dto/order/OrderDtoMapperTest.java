@@ -61,6 +61,9 @@ public class OrderDtoMapperTest {
     @InjectMocks
     private OrderDtoMapper orderDtoMapper;
 
+    private final ModelUserDto createdByDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
+    private final ModelUserDto updatedByDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -87,13 +90,6 @@ public class OrderDtoMapperTest {
                 .createdAt(createdAt)
                 .updatedBy(updatedBy)
                 .updatedAt(updatedAt)
-                .build();
-
-        ModelUserDto createdByDto = ModelUserDto.builder()
-                .id("670258595df0332b7901a83a").name("Makechi Eric")
-                .build();
-        ModelUserDto updatedByDto = ModelUserDto.builder()
-                .id("670258595df0332b7901a83a").name("Makechi Eric")
                 .build();
 
         Customer customer = mock(Customer.class);
@@ -135,8 +131,8 @@ public class OrderDtoMapperTest {
         assertEquals(10, itemOrderDto.quantity());
         assertEquals(BigDecimal.valueOf(2000), itemOrderDto.price());
 
-        assertEquals("Makechi Eric", orderDto.getCreatedBy().getName());
-        assertEquals("Makechi Eric", orderDto.getUpdatedBy().getName());
+        assertEquals("Makechi Eric", orderDto.getCreatedBy().name());
+        assertEquals("Makechi Eric", orderDto.getUpdatedBy().name());
     }
 
     @Test
@@ -162,17 +158,8 @@ public class OrderDtoMapperTest {
                 .updatedAt(updatedAt)
                 .build();
 
-        ModelUserDto createdByDto = ModelUserDto.builder()
-                .id("670258595df0332b7901a83a").name("Makechi Eric")
-                .build();
-        ModelUserDto updatedByDto = ModelUserDto.builder()
-                .id("670258595df0332b7901a83a").name("Makechi Eric")
-                .build();
-
         Supplier supplier = mock(Supplier.class);
-        ModelSupplierDto supplierDto = ModelSupplierDto.builder()
-                .id("6702c5fe3969533b2f0ff598").name("Supplier Name")
-                .build();
+        ModelSupplierDto supplierDto = new ModelSupplierDto("6702c5fe3969533b2f0ff598", "Supplier Name");
 
         User user = mock(User.class);
         ItemDto itemDto = ItemDto.builder()
@@ -200,8 +187,8 @@ public class OrderDtoMapperTest {
         assertEquals(OrderStatus.PENDING, orderDto.getOrderStatus());
 
         assertNotNull(orderDto.getSupplier());
-        assertEquals(supplierDto.getId(), orderDto.getSupplier().getId());
-        assertEquals(supplierDto.getName(), orderDto.getSupplier().getName());
+        assertEquals(supplierDto.id(), orderDto.getSupplier().id());
+        assertEquals(supplierDto.name(), orderDto.getSupplier().name());
 
         assertEquals(1, orderDto.getOrderItems().size());
         ItemOrderDto itemOrderDto = orderDto.getOrderItems().getFirst();
@@ -210,7 +197,7 @@ public class OrderDtoMapperTest {
         assertEquals(10, itemOrderDto.quantity());
         assertEquals(BigDecimal.valueOf(2000), itemOrderDto.price());
 
-        assertEquals("Makechi Eric", orderDto.getCreatedBy().getName());
-        assertEquals("Makechi Eric", orderDto.getUpdatedBy().getName());
+        assertEquals("Makechi Eric", orderDto.getCreatedBy().name());
+        assertEquals("Makechi Eric", orderDto.getUpdatedBy().name());
     }
 }

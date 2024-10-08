@@ -40,9 +40,6 @@ public class SupplierDtoMapper implements Function<Supplier, SupplierDto> {
         if (supplier == null)
             throw new NullPointerException("Supplier should not be null");
 
-        return ModelSupplierDto.builder()
-                .id(supplier.getId())
-                .name(supplier.getName())
-                .build();
+        return new ModelSupplierDto(supplier.getId(), supplier.getName());
     }
 }

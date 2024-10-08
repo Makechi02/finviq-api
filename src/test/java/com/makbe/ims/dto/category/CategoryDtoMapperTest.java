@@ -42,7 +42,6 @@ class CategoryDtoMapperTest {
         User mockUser = mock(User.class);
 
         when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
-
         when(userMapper.toModelUserDto(mockUser)).thenReturn(Mockito.mock(ModelUserDto.class));
 
         CategoryDto categoryDto = categoryDtoMapper.apply(category);
@@ -78,5 +77,27 @@ class CategoryDtoMapperTest {
         assertNotNull(categoryDto);
         assertNull(categoryDto.getId());
         assertNull(categoryDto.getName());
+    }
+
+    @Test
+    void shouldMapCategoryToModelCategoryDto() {
+        Category category = Category.builder()
+                .id("123")
+                .name("electronics")
+                .createdBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+                .build();
+
+        ModelCategoryDto modelCategoryDto = categoryDtoMapper.toModelCategoryDto(category);
+
+        assertNotNull(modelCategoryDto);
+        assertEquals("123", modelCategoryDto.id());
+        assertEquals("electronics", modelCategoryDto.name());
+    }
+
+    @Test
+    public void shouldThrowNullPointerExceptionWhenCategoryInModelCategoryDtoIsNull() {
+        var exception = assertThrows(NullPointerException.class, () -> categoryDtoMapper.toModelCategoryDto(null));
+        assertEquals("Category should not be null", exception.getMessage());
     }
 }

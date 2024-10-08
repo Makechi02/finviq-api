@@ -37,9 +37,6 @@ public class CategoryDtoMapper implements Function<Category, CategoryDto> {
         if (category == null)
             throw new NullPointerException("Category should not be null");
 
-        return ModelCategoryDto.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
+        return new ModelCategoryDto(category.getId(), category.getName());
     }
 }

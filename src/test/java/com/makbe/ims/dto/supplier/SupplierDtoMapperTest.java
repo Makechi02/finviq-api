@@ -22,6 +22,15 @@ class SupplierDtoMapperTest {
     private UserRepository userRepository;
     private SupplierDtoMapper supplierDtoMapper;
 
+    private final Supplier supplier = Supplier.builder()
+            .id("supplier123")
+            .name("ABC Suppliers")
+            .address("123 Market Street")
+            .phone("0712345678")
+            .addedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+            .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
+            .build();
+
     @BeforeEach
     void setUp() {
         userMapper = mock(UserMapper.class);
@@ -31,15 +40,6 @@ class SupplierDtoMapperTest {
 
     @Test
     void shouldMapSupplierToSupplierDto() {
-        Supplier supplier = Supplier.builder()
-                .id("supplier123")
-                .name("ABC Suppliers")
-                .address("123 Market Street")
-                .phone("0712345678")
-                .addedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
-                .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
-                .build();
-
         User mockUser = mock(User.class);
         var mockAddedByDto = Mockito.mock(ModelUserDto.class);
         var mockUpdatedByDto = Mockito.mock(ModelUserDto.class);
@@ -66,16 +66,11 @@ class SupplierDtoMapperTest {
 
     @Test
     void shouldMapSupplierToModelSupplierDto() {
-        Supplier supplier = Supplier.builder()
-                .id("supplier123")
-                .name("ABC Suppliers")
-                .build();
-
         ModelSupplierDto modelSupplierDto = supplierDtoMapper.toModelSupplierDto(supplier);
 
         assertNotNull(modelSupplierDto);
-        assertEquals("supplier123", modelSupplierDto.getId());
-        assertEquals("ABC Suppliers", modelSupplierDto.getName());
+        assertEquals("supplier123", modelSupplierDto.id());
+        assertEquals("ABC Suppliers", modelSupplierDto.name());
     }
 
     @Test

@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.makbe</groupId>
-    <artifactId>ims</artifactId>
+    <artifactId>invizio</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>IMS</name>
+    <name>invizio</name>
     <description>A inventory management system API</description>
     <url/>
     <licenses>

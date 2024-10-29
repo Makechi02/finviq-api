@@ -19,4 +19,12 @@ public interface OrderService {
     OrderDto createPurchasesOrder(CreateOrderRequest request);
 
     OrderDto updateOrderStatus(String orderId, UpdateOrderStatusRequest request);
+
+    List<OrderDto> getSalesOrders();
+
+    List<OrderDto> getPurchasesOrders();
+
+    List<OrderDto> getOrdersByCustomer(String customerId);
+
+    List<OrderDto> getOrdersBySupplier(String supplierId);
 }

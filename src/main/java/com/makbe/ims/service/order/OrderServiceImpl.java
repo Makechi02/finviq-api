@@ -41,10 +41,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createSalesOrder(CreateOrderRequest request) {
         log.info("Creating sales order for userId: {}", request.userId());
 
-        if (!customerRepository.existsById(request.userId())) {
-            log.error("Customer with id {} not found", request.userId());
-            throw new ResourceNotFoundException("Customer with id " + request.userId() + " not found");
-        }
+        checkIfCustomerExists(request.userId());
 
         var order = Order.builder()
                 .userId(new ObjectId(request.userId()))
@@ -63,10 +60,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createPurchasesOrder(CreateOrderRequest request) {
         log.info("Creating purchases order for supplierId: {}", request.userId());
 
-        if (!supplierRepository.existsById(request.userId())) {
-            log.error("Supplier with id {} not found", request.userId());
-            throw new ResourceNotFoundException("Supplier with id " + request.userId() + " not found");
-        }
+        checkIfSupplierExists(request.userId());
 
         var order = Order.builder()
                 .userId(new ObjectId(request.userId()))
@@ -168,5 +162,61 @@ public class OrderServiceImpl implements OrderService {
         }
         orderRepository.deleteById(id);
         log.info("Order with id {} deleted successfully", id);
+    }
+
+    @Override
+    public List<OrderDto> getSalesOrders() {
+        log.info("Fetching all sales orders");
+        return orderRepository.findAllByOrderType(OrderType.SALE)
+                .stream()
+                .map(orderDtoMapper)
+                .toList();
+    }
+
+    @Override
+    public List<OrderDto> getPurchasesOrders() {
+        log.info("Fetching all purchases orders");
+        return orderRepository.findAllByOrderType(OrderType.PURCHASE)
+                .stream()
+                .map(orderDtoMapper)
+                .toList();
+    }
+
+    @Override
+    public List<OrderDto> getOrdersByCustomer(String customerId) {
+        log.info("Fetching all orders by customer {}", customerId);
+
+        checkIfCustomerExists(customerId);
+
+        return orderRepository.findAllByUserId(new ObjectId(customerId))
+                .stream()
+                .map(orderDtoMapper)
+                .toList();
+    }
+
+    @Override
+    public List<OrderDto> getOrdersBySupplier(String supplierId) {
+        log.info("Fetching all orders by supplier {}", supplierId);
+
+        checkIfSupplierExists(supplierId);
+
+        return orderRepository.findAllByUserId(new ObjectId(supplierId))
+                .stream()
+                .map(orderDtoMapper)
+                .toList();
+    }
+
+    private void checkIfCustomerExists(String customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            log.error("Customer with id {} not found", customerId);
+            throw new ResourceNotFoundException("Customer with id " + customerId + " not found");
+        }
+    }
+
+    private void checkIfSupplierExists(String supplierId) {
+        if (!supplierRepository.existsById(supplierId)) {
+            log.error("Supplier with id {} not found", supplierId);
+            throw new ResourceNotFoundException("Supplier with id " + supplierId + " not found");
+        }
     }
 }

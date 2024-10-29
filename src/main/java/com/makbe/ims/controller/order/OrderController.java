@@ -26,10 +26,30 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
 
+    @GetMapping("/sales")
+    public List<OrderDto> getSalesOrders() {
+        return orderService.getSalesOrders();
+    }
+
+    @GetMapping("/sales/customer/{customerId}")
+    public List<OrderDto> getOrdersByCustomer(@PathVariable String customerId) {
+        return orderService.getOrdersByCustomer(customerId);
+    }
+
     @PostMapping("/sales")
     public ResponseEntity<OrderDto> createSalesOrder(@RequestBody CreateOrderRequest request) {
         var order = orderService.createSalesOrder(request);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/purchases")
+    public List<OrderDto> getPurchasesOrders() {
+        return orderService.getPurchasesOrders();
+    }
+
+    @GetMapping("/purchases/supplier/{supplierId}")
+    public List<OrderDto> getOrdersBySupplier(@PathVariable String supplierId) {
+        return orderService.getOrdersBySupplier(supplierId);
     }
 
     @PostMapping("/purchases")

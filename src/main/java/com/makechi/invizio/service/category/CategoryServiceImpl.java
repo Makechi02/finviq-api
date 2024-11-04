@@ -39,16 +39,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(String id) {
-        Category category = categoryRepository.findById(id)
+        return categoryRepository
+                .findById(id)
+                .map(categoryDtoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
-        return categoryDtoMapper.apply(category);
     }
 
     @Override
     public CategoryDto getCategoryByName(String name) {
-        Category category = categoryRepository.findByName(name)
+        return categoryRepository
+                .findByName(name)
+                .map(categoryDtoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with name " + name + " not found"));
-        return categoryDtoMapper.apply(category);
     }
 
     @Override

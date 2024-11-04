@@ -3,10 +3,14 @@ package com.makechi.invizio.dto.category;
 import com.makechi.invizio.collections.Category;
 import com.makechi.invizio.dto.user.ModelUserDto;
 import com.makechi.invizio.dto.user.UserMapper;
+import com.makechi.invizio.exception.ResourceNotFoundException;
+import com.makechi.invizio.repository.CategoryRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -15,12 +19,14 @@ import static org.mockito.Mockito.when;
 class CategoryDtoMapperTest {
 
     private CategoryDtoMapper categoryDtoMapper;
+    private CategoryRepository categoryRepository;
     private UserMapper userMapper;
 
     @BeforeEach
     void setUp() {
         userMapper = mock(UserMapper.class);
-        categoryDtoMapper = new CategoryDtoMapper(userMapper);
+        categoryRepository = mock(CategoryRepository.class);
+        categoryDtoMapper = new CategoryDtoMapper(categoryRepository, userMapper);
     }
 
     @Test
@@ -77,7 +83,8 @@ class CategoryDtoMapperTest {
                 .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .build();
 
-        ModelCategoryDto modelCategoryDto = categoryDtoMapper.toModelCategoryDto(category);
+        when(categoryRepository.findById("123")).thenReturn(Optional.of(category));
+        ModelCategoryDto modelCategoryDto = categoryDtoMapper.toModelCategoryDto(category.getId());
 
         assertNotNull(modelCategoryDto);
         assertEquals("123", modelCategoryDto.id());
@@ -85,8 +92,9 @@ class CategoryDtoMapperTest {
     }
 
     @Test
-    public void shouldThrowNullPointerExceptionWhenCategoryInModelCategoryDtoIsNull() {
-        var exception = assertThrows(NullPointerException.class, () -> categoryDtoMapper.toModelCategoryDto(null));
-        assertEquals("Category should not be null", exception.getMessage());
+    public void shouldThrowResourceNotFoundExceptionWhenCategoryInModelCategoryDtoIsNotFound() {
+        when(categoryRepository.findById("66d0a8a9b48aebab27f74f5a")).thenReturn(Optional.empty());
+        var exception = assertThrows(ResourceNotFoundException.class, () -> categoryDtoMapper.toModelCategoryDto("66d0a8a9b48aebab27f74f5a"));
+        assertEquals("Category with id 66d0a8a9b48aebab27f74f5a not found", exception.getMessage());
     }
 }

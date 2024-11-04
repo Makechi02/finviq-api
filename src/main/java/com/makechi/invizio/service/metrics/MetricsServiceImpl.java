@@ -61,8 +61,11 @@ public class MetricsServiceImpl implements MetricService {
                 .toList();
 
         List<ItemDto> recentItems = itemRepository.findTop5ByOrderByCreatedAtDesc().stream().map(itemDtoMapper).toList();
-        List<ModelCategoryDto> recentCategories = categoryRepository.findTop5ByOrderByCreatedAtDesc().stream()
-                .map(categoryDtoMapper::toModelCategoryDto).toList();
+        List<ModelCategoryDto> recentCategories = categoryRepository
+                .findTop5ByOrderByCreatedAtDesc()
+                .stream()
+                .map(category -> categoryDtoMapper.toModelCategoryDto(category.getId()))
+                .toList();
         List<ModelSupplierDto> recentSuppliers = supplierRepository.findTop5ByOrderByAddedAtDesc().stream()
                 .map(supplierDtoMapper::toModelSupplierDto).toList();
 

@@ -3,7 +3,6 @@ package com.makechi.invizio.dto.item;
 import com.makechi.invizio.collections.Item;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.user.UserMapper;
-import com.makechi.invizio.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +13,10 @@ import java.util.function.Function;
 public class ItemDtoMapper implements Function<Item, ItemDto> {
 
     private final UserMapper userMapper;
-    private final CategoryRepository categoryRepository;
     private final CategoryDtoMapper categoryDtoMapper;
 
     @Override
     public ItemDto apply(Item item) {
-
-        var category = categoryDtoMapper.toModelCategoryDto(categoryRepository.findById(item.getCategory().toString()).orElseThrow());
-
         return ItemDto.builder()
                 .id(item.getId())
                 .brand(item.getBrand())
@@ -33,7 +28,7 @@ public class ItemDtoMapper implements Function<Item, ItemDto> {
                 .sku(item.getSku())
                 .stockAlert(item.getStockAlert())
                 .updatedAt(item.getUpdatedAt())
-                .category(category)
+                .category(categoryDtoMapper.toModelCategoryDto(item.getCategory().toHexString()))
                 .createdBy(userMapper.toModelUserDto(item.getCreatedBy().toHexString()))
                 .updatedBy(userMapper.toModelUserDto(item.getUpdatedBy().toHexString()))
                 .build();

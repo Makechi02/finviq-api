@@ -2,12 +2,17 @@ package com.makechi.invizio.dto.user;
 
 import com.makechi.invizio.collections.Role;
 import com.makechi.invizio.collections.User;
+import com.makechi.invizio.exception.ResourceNotFoundException;
+import com.makechi.invizio.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class UserMapperTest {
 
@@ -22,10 +27,12 @@ class UserMapperTest {
             .build();
 
     private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        userMapper = new UserMapper();
+        userRepository = mock(UserRepository.class);
+        userMapper = new UserMapper(userRepository);
     }
 
     @Test
@@ -48,7 +55,8 @@ class UserMapperTest {
 
     @Test
     public void shouldMapUserToModelUserDTO() {
-        ModelUserDto modelUserDto = userMapper.toModelUserDto(user);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        ModelUserDto modelUserDto = userMapper.toModelUserDto(user.getId());
 
         assertNotNull(modelUserDto);
         assertEquals(modelUserDto.id(), user.getId());
@@ -56,9 +64,10 @@ class UserMapperTest {
     }
 
     @Test
-    public void shouldThrowNullPointerExceptionWhenUserIsNullToModelUserDto() {
-        var exception = assertThrows(NullPointerException.class, () -> userMapper.toModelUserDto(null));
-        assertEquals("User should not be null", exception.getMessage());
+    public void shouldThrowResourceNotFoundExceptionWhenUserIdIsNotFoundToModelUserDto() {
+        when(userRepository.findById("123456789")).thenReturn(Optional.empty());
+        var exception = assertThrows(ResourceNotFoundException.class, () -> userMapper.toModelUserDto("123456789"));
+        assertEquals("User with id 123456789 not found", exception.getMessage());
     }
 
 }

@@ -2,7 +2,6 @@ package com.makechi.invizio.dto.category;
 
 import com.makechi.invizio.collections.Category;
 import com.makechi.invizio.dto.user.UserMapper;
-import com.makechi.invizio.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,22 +12,18 @@ import java.util.function.Function;
 public class CategoryDtoMapper implements Function<Category, CategoryDto> {
 
     private final UserMapper userMapper;
-    private final UserRepository userRepository;
 
     @Override
     public CategoryDto apply(Category category) {
         if (category == null)
             throw new NullPointerException("Category should not be null");
 
-        var createdBy = userMapper.toModelUserDto(userRepository.findById(category.getCreatedBy().toString()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(category.getUpdatedBy().toString()).orElseThrow());
-
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .createdBy(createdBy)
+                .createdBy(userMapper.toModelUserDto(category.getCreatedBy().toHexString()))
                 .createdAt(category.getCreatedAt())
-                .updatedBy(updatedBy)
+                .updatedBy(userMapper.toModelUserDto(category.getUpdatedBy().toHexString()))
                 .updatedAt(category.getUpdatedAt())
                 .build();
     }

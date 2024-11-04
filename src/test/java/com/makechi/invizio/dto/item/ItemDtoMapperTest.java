@@ -2,13 +2,11 @@ package com.makechi.invizio.dto.item;
 
 import com.makechi.invizio.collections.Category;
 import com.makechi.invizio.collections.Item;
-import com.makechi.invizio.collections.User;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.category.ModelCategoryDto;
 import com.makechi.invizio.dto.user.ModelUserDto;
 import com.makechi.invizio.dto.user.UserMapper;
 import com.makechi.invizio.repository.CategoryRepository;
-import com.makechi.invizio.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 class ItemDtoMapperTest {
 
-    private UserRepository userRepository;
     private CategoryRepository categoryRepository;
     private CategoryDtoMapper categoryDtoMapper;
     private UserMapper userMapper;
@@ -30,12 +27,11 @@ class ItemDtoMapperTest {
 
     @BeforeEach
     void setUp() {
-        userRepository = mock(UserRepository.class);
         categoryRepository = mock(CategoryRepository.class);
         categoryDtoMapper = mock(CategoryDtoMapper.class);
         userMapper = mock(UserMapper.class);
 
-        itemDtoMapper = new ItemDtoMapper(userRepository, userMapper, categoryRepository, categoryDtoMapper);
+        itemDtoMapper = new ItemDtoMapper(userMapper, categoryRepository, categoryDtoMapper);
     }
 
     @Test
@@ -54,16 +50,14 @@ class ItemDtoMapperTest {
                 .category(new ObjectId("66d0a8a9b48aebab27f74f5a"))
                 .build();
 
-        User mockUser = mock(User.class);
         Category mockCategory = mock(Category.class);
         var mockCreatedByDto = Mockito.mock(ModelUserDto.class);
         var mockUpdatedByDto = Mockito.mock(ModelUserDto.class);
         var mockCategoryDto = Mockito.mock(ModelCategoryDto.class);
 
-        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
         when(categoryRepository.findById("66d0a8a9b48aebab27f74f5a")).thenReturn(Optional.of(mockCategory));
 
-        when(userMapper.toModelUserDto(mockUser)).thenReturn(mockCreatedByDto).thenReturn(mockUpdatedByDto);
+        when(userMapper.toModelUserDto("66d0a17eb48aebab27f74eb6")).thenReturn(mockCreatedByDto).thenReturn(mockUpdatedByDto);
         when(categoryDtoMapper.toModelCategoryDto(mockCategory)).thenReturn(mockCategoryDto);
 
         ItemDto itemDto = itemDtoMapper.apply(item);

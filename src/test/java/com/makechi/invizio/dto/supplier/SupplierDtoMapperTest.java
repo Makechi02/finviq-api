@@ -1,26 +1,17 @@
 package com.makechi.invizio.dto.supplier;
 
 import com.makechi.invizio.collections.Supplier;
-import com.makechi.invizio.collections.User;
 import com.makechi.invizio.dto.user.ModelUserDto;
 import com.makechi.invizio.dto.user.UserMapper;
-import com.makechi.invizio.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SupplierDtoMapperTest {
-
-    private UserMapper userMapper;
-    private UserRepository userRepository;
-    private SupplierDtoMapper supplierDtoMapper;
 
     private final Supplier supplier = Supplier.builder()
             .id("supplier123")
@@ -30,22 +21,19 @@ class SupplierDtoMapperTest {
             .addedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
             .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
             .build();
+    private UserMapper userMapper;
+    private SupplierDtoMapper supplierDtoMapper;
 
     @BeforeEach
     void setUp() {
         userMapper = mock(UserMapper.class);
-        userRepository = mock(UserRepository.class);
-        supplierDtoMapper = new SupplierDtoMapper(userMapper, userRepository);
+        supplierDtoMapper = new SupplierDtoMapper(userMapper);
     }
 
     @Test
     void shouldMapSupplierToSupplierDto() {
-        User mockUser = mock(User.class);
-        var mockAddedByDto = Mockito.mock(ModelUserDto.class);
-        var mockUpdatedByDto = Mockito.mock(ModelUserDto.class);
-
-        when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
-        when(userMapper.toModelUserDto(mockUser)).thenReturn(mockAddedByDto).thenReturn(mockUpdatedByDto);
+        var userDto = new ModelUserDto("66d0a17eb48aebab27f74eb6", "Makechi Eric");
+        when(userMapper.toModelUserDto("66d0a17eb48aebab27f74eb6")).thenReturn(userDto);
 
         SupplierDto supplierDto = supplierDtoMapper.apply(supplier);
 
@@ -54,8 +42,8 @@ class SupplierDtoMapperTest {
         assertEquals("ABC Suppliers", supplierDto.getName());
         assertEquals("123 Market Street", supplierDto.getAddress());
         assertEquals("0712345678", supplierDto.getPhone());
-        assertEquals(mockAddedByDto, supplierDto.getAddedBy());
-        assertEquals(mockUpdatedByDto, supplierDto.getUpdatedBy());
+        assertEquals("66d0a17eb48aebab27f74eb6", supplierDto.getAddedBy().id());
+        assertEquals("66d0a17eb48aebab27f74eb6", supplierDto.getUpdatedBy().id());
     }
 
     @Test

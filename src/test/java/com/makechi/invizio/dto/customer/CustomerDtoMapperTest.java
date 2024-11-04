@@ -1,16 +1,13 @@
 package com.makechi.invizio.dto.customer;
 
 import com.makechi.invizio.collections.Customer;
-import com.makechi.invizio.collections.User;
 import com.makechi.invizio.dto.user.ModelUserDto;
 import com.makechi.invizio.dto.user.UserMapper;
-import com.makechi.invizio.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -19,15 +16,12 @@ import static org.mockito.Mockito.when;
 class CustomerDtoMapperTest {
 
     private CustomerDtoMapper customerDtoMapper;
-    private UserRepository userRepository;
     private UserMapper userMapper;
 
     @BeforeEach
     void setUp() {
         userMapper = mock(UserMapper.class);
-        userRepository = mock(UserRepository.class);
-
-        customerDtoMapper = new CustomerDtoMapper(userRepository, userMapper);
+        customerDtoMapper = new CustomerDtoMapper(userMapper);
     }
 
     @Test
@@ -45,9 +39,8 @@ class CustomerDtoMapperTest {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        User user = mock(User.class);
-        when(userRepository.findById("670258595df0332b7901a83a")).thenReturn(Optional.of(user));
-        when(userMapper.toModelUserDto(user)).thenReturn(mock(ModelUserDto.class));
+        var modelUserDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
+        when(userMapper.toModelUserDto("670258595df0332b7901a83a")).thenReturn(modelUserDto);
 
         CustomerDto customerDto = customerDtoMapper.apply(customer);
         assertNotNull(customerDto);
@@ -59,6 +52,8 @@ class CustomerDtoMapperTest {
         assertEquals("Moi Avenue, Nairobi", customerDto.getAddress());
         assertEquals(customer.getAddedAt(), customerDto.getAddedAt());
         assertEquals(customer.getUpdatedAt(), customerDto.getUpdatedAt());
+        assertEquals("670258595df0332b7901a83a", customerDto.getAddedBy().id());
+        assertEquals("670258595df0332b7901a83a", customerDto.getUpdatedBy().id());
     }
 
     @Test

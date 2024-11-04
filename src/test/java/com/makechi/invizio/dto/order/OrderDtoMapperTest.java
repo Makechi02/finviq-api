@@ -2,7 +2,6 @@ package com.makechi.invizio.dto.order;
 
 import com.makechi.invizio.collections.Customer;
 import com.makechi.invizio.collections.Supplier;
-import com.makechi.invizio.collections.User;
 import com.makechi.invizio.collections.order.Order;
 import com.makechi.invizio.collections.order.OrderItem;
 import com.makechi.invizio.collections.order.OrderStatus;
@@ -16,7 +15,6 @@ import com.makechi.invizio.dto.user.ModelUserDto;
 import com.makechi.invizio.dto.user.UserMapper;
 import com.makechi.invizio.repository.CustomerRepository;
 import com.makechi.invizio.repository.SupplierRepository;
-import com.makechi.invizio.repository.UserRepository;
 import com.makechi.invizio.service.item.ItemService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,32 +35,21 @@ import static org.mockito.Mockito.when;
 
 public class OrderDtoMapperTest {
 
-    @Mock
-    private UserRepository userRepository;
-
+    private final ModelUserDto modelUserDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
     @Mock
     private CustomerRepository customerRepository;
-
     @Mock
     private SupplierRepository supplierRepository;
-
     @Mock
     private UserMapper userMapper;
-
     @Mock
     private ItemService itemService;
-
     @Mock
     private CustomerDtoMapper customerDtoMapper;
-
     @Mock
     private SupplierDtoMapper supplierDtoMapper;
-
     @InjectMocks
     private OrderDtoMapper orderDtoMapper;
-
-    private final ModelUserDto createdByDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
-    private final ModelUserDto updatedByDto = new ModelUserDto("670258595df0332b7901a83a", "Makechi Eric");
 
     @BeforeEach
     public void setUp() {
@@ -72,8 +59,6 @@ public class OrderDtoMapperTest {
     @Test
     public void shouldMapOrderToOrderDtoForSale() {
         ObjectId userId = new ObjectId("6702c5fe3969533b2f0ff595");
-        ObjectId createdBy = new ObjectId();
-        ObjectId updatedBy = new ObjectId();
         LocalDateTime orderDate = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
@@ -86,27 +71,21 @@ public class OrderDtoMapperTest {
                 .orderStatus(OrderStatus.PENDING)
                 .userId(userId)
                 .orderItems(List.of(orderItem))
-                .createdBy(createdBy)
+                .createdBy(new ObjectId("670258595df0332b7901a83a"))
                 .createdAt(createdAt)
-                .updatedBy(updatedBy)
+                .updatedBy(new ObjectId("670258595df0332b7901a83a"))
                 .updatedAt(updatedAt)
                 .build();
 
         Customer customer = mock(Customer.class);
         ModelCustomerDto customerDto = new ModelCustomerDto("6702c5fe3969533b2f0ff598", "Customer Name");
 
-        User user = mock(User.class);
         ItemDto itemDto = ItemDto.builder()
                 .id("6702c6be3969533b2f0ff597")
                 .name("HP Elitebook 8440p")
                 .build();
 
-        when(userRepository.findById(createdBy.toHexString())).thenReturn(Optional.of(user));
-        when(userRepository.findById(updatedBy.toHexString())).thenReturn(Optional.of(user));
-
-        when(userMapper.toModelUserDto(user)).thenReturn(createdByDto);
-        when(userMapper.toModelUserDto(user)).thenReturn(updatedByDto);
-
+        when(userMapper.toModelUserDto("670258595df0332b7901a83a")).thenReturn(modelUserDto);
         when(customerRepository.findById(userId.toHexString())).thenReturn(Optional.of(customer));
         when(customerDtoMapper.toModelCustomerDto(customer)).thenReturn(customerDto);
 
@@ -138,8 +117,6 @@ public class OrderDtoMapperTest {
     @Test
     public void shouldMapOrderToOrderDtoForPurchase() {
         ObjectId userId = new ObjectId("6702c5fe3969533b2f0ff595");
-        ObjectId createdBy = new ObjectId();
-        ObjectId updatedBy = new ObjectId();
         LocalDateTime orderDate = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
@@ -152,27 +129,21 @@ public class OrderDtoMapperTest {
                 .orderStatus(OrderStatus.PENDING)
                 .userId(userId)
                 .orderItems(List.of(orderItem))
-                .createdBy(createdBy)
+                .createdBy(new ObjectId("670258595df0332b7901a83a"))
                 .createdAt(createdAt)
-                .updatedBy(updatedBy)
+                .updatedBy(new ObjectId("670258595df0332b7901a83a"))
                 .updatedAt(updatedAt)
                 .build();
 
         Supplier supplier = mock(Supplier.class);
         ModelSupplierDto supplierDto = new ModelSupplierDto("6702c5fe3969533b2f0ff598", "Supplier Name");
 
-        User user = mock(User.class);
         ItemDto itemDto = ItemDto.builder()
                 .id("6702c6be3969533b2f0ff597")
                 .name("HP Elitebook 8440p")
                 .build();
 
-        when(userRepository.findById(createdBy.toHexString())).thenReturn(Optional.of(user));
-        when(userRepository.findById(updatedBy.toHexString())).thenReturn(Optional.of(user));
-
-        when(userMapper.toModelUserDto(user)).thenReturn(createdByDto);
-        when(userMapper.toModelUserDto(user)).thenReturn(updatedByDto);
-
+        when(userMapper.toModelUserDto("670258595df0332b7901a83a")).thenReturn(modelUserDto);
         when(supplierRepository.findById(userId.toHexString())).thenReturn(Optional.of(supplier));
         when(supplierDtoMapper.toModelSupplierDto(supplier)).thenReturn(supplierDto);
 

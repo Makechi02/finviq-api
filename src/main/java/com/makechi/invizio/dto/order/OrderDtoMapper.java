@@ -9,7 +9,6 @@ import com.makechi.invizio.dto.supplier.SupplierDtoMapper;
 import com.makechi.invizio.dto.user.UserMapper;
 import com.makechi.invizio.repository.CustomerRepository;
 import com.makechi.invizio.repository.SupplierRepository;
-import com.makechi.invizio.repository.UserRepository;
 import com.makechi.invizio.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class OrderDtoMapper implements Function<Order, OrderDto> {
 
-    private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final SupplierRepository supplierRepository;
     private final UserMapper userMapper;
@@ -30,9 +28,6 @@ public class OrderDtoMapper implements Function<Order, OrderDto> {
 
     @Override
     public OrderDto apply(Order order) {
-
-        var createdBy = userMapper.toModelUserDto(userRepository.findById(order.getCreatedBy().toHexString()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(order.getUpdatedBy().toHexString()).orElseThrow());
 
         ModelCustomerDto customer = null;
         ModelSupplierDto supplier = null;
@@ -61,9 +56,9 @@ public class OrderDtoMapper implements Function<Order, OrderDto> {
                                 .map(this::mapToItemOrderDto)
                                 .toList()
                 )
-                .createdBy(createdBy)
+                .createdBy(userMapper.toModelUserDto(order.getCreatedBy().toHexString()))
                 .createdAt(order.getCreatedAt())
-                .updatedBy(updatedBy)
+                .updatedBy(userMapper.toModelUserDto(order.getUpdatedBy().toHexString()))
                 .updatedAt(order.getUpdatedAt())
                 .build();
     }

@@ -4,7 +4,6 @@ import com.makechi.invizio.collections.Item;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.user.UserMapper;
 import com.makechi.invizio.repository.CategoryRepository;
-import com.makechi.invizio.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +13,13 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class ItemDtoMapper implements Function<Item, ItemDto> {
 
-    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final CategoryRepository categoryRepository;
     private final CategoryDtoMapper categoryDtoMapper;
 
     @Override
     public ItemDto apply(Item item) {
-        var createdBy = userMapper.toModelUserDto(userRepository.findById(item.getCreatedBy().toString()).orElseThrow());
-        var updatedBy = userMapper.toModelUserDto(userRepository.findById(item.getUpdatedBy().toString()).orElseThrow());
+
         var category = categoryDtoMapper.toModelCategoryDto(categoryRepository.findById(item.getCategory().toString()).orElseThrow());
 
         return ItemDto.builder()
@@ -37,8 +34,8 @@ public class ItemDtoMapper implements Function<Item, ItemDto> {
                 .stockAlert(item.getStockAlert())
                 .updatedAt(item.getUpdatedAt())
                 .category(category)
-                .createdBy(createdBy)
-                .updatedBy(updatedBy)
+                .createdBy(userMapper.toModelUserDto(item.getCreatedBy().toHexString()))
+                .updatedBy(userMapper.toModelUserDto(item.getUpdatedBy().toHexString()))
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.makechi.invizio.service.metrics;
 
-import com.makechi.invizio.collections.Item;
+import com.makechi.invizio.collections.item.Item;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.category.ModelCategoryDto;
 import com.makechi.invizio.dto.item.ItemDto;
@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,9 +83,17 @@ public class MetricsServiceImpl implements MetricService {
     }
 
     @Override
-    public double calculateInventoryValuation() {
+    public BigDecimal calculateInventoryValuation() {
+        BigDecimal totalValuation = BigDecimal.ZERO;
+
         List<Item> items = itemRepository.findAllForInventoryValuation();
-        return items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+
+        for (Item item : items) {
+            BigDecimal totalItemValue = item.getCostPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            totalValuation = totalValuation.add(totalItemValue);
+        }
+
+        return totalValuation;
     }
 
     @Override

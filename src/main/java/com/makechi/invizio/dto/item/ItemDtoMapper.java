@@ -1,6 +1,6 @@
 package com.makechi.invizio.dto.item;
 
-import com.makechi.invizio.collections.Item;
+import com.makechi.invizio.collections.item.Item;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.user.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,9 @@ public class ItemDtoMapper implements Function<Item, ItemDto> {
                 .createdAt(item.getCreatedAt())
                 .model(item.getModel())
                 .name(item.getName())
-                .price(item.getPrice())
+                .costPrice(item.getCostPrice())
+                .retailPrice(item.getRetailPrice())
+                .vatInclusivePrice(item.getVatInclusivePrice())
                 .quantity(item.getQuantity())
                 .sku(item.getSku())
                 .stockAlert(item.getStockAlert())

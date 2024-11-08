@@ -105,11 +105,13 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> processedItems = new ArrayList<>();
         for (OrderItemDto orderItemDto : orderItems) {
             ItemDto item = itemService.getItemById(orderItemDto.itemId());
-            var orderItem = new OrderItem(
-                    new ObjectId(item.getId()),
-                    orderItemDto.quantity(),
-                    BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(orderItemDto.quantity()))
-            );
+
+            BigDecimal price = switch (order.getOrderType()) {
+                case PURCHASE -> item.getCostPrice().multiply(BigDecimal.valueOf(orderItemDto.quantity()));
+                case SALE -> item.getRetailPrice().multiply(BigDecimal.valueOf(orderItemDto.quantity()));
+            };
+
+            var orderItem = new OrderItem(new ObjectId(item.getId()), orderItemDto.quantity(), price);
 
             processedItems.add(orderItem);
             log.debug("Processed order item: {}", orderItem);

@@ -1,7 +1,7 @@
 package com.makechi.invizio.service.item;
 
 import com.makechi.invizio.collections.Category;
-import com.makechi.invizio.collections.Item;
+import com.makechi.invizio.collections.item.Item;
 import com.makechi.invizio.controller.item.AddUpdateItemRequest;
 import com.makechi.invizio.dto.item.ItemDto;
 import com.makechi.invizio.dto.item.ItemDtoMapper;
@@ -18,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final ItemDtoMapper itemDtoMapper;
+
+    private static final BigDecimal VAT_RATE = new BigDecimal("0.16");
 
     @Override
     public Page<ItemDto> getAllItems(int page, int size, String sortBy, String sortDirection) {
@@ -48,16 +53,18 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(String id) {
-        Item item = itemRepository.findById(id)
+        return itemRepository
+                .findById(id)
+                .map(itemDtoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
-        return itemDtoMapper.apply(item);
     }
 
     @Override
     public ItemDto getItemBySku(String sku) {
-        Item item = itemRepository.findBySku(sku)
+        return itemRepository
+                .findBySku(sku)
+                .map(itemDtoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with SKU " + sku + " not found"));
-        return itemDtoMapper.apply(item);
     }
 
     @Override
@@ -65,14 +72,24 @@ public class ItemServiceImpl implements ItemService {
         Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
+        BigDecimal vatInclusivePrice = BigDecimal.ZERO;
+
         if (itemRepository.existsByName(request.getName())
                 && itemRepository.existsByBrand(request.getBrand())
                 && itemRepository.existsByModel(request.getModel())) {
             throw new DuplicateResourceException("Item already exists");
         }
 
-        if (request.getPrice() <= 0) {
-            throw new RequestValidationException("Item price can't be zero or below");
+        if (request.getRetailPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RequestValidationException("Item retail price can't be zero or below");
+        }
+
+        if (request.getCostPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RequestValidationException("Item cost price can't be zero or below");
+        }
+
+        if (request.getVatInclusivePrice().compareTo(BigDecimal.ZERO) <= 0) {
+            vatInclusivePrice = request.getRetailPrice().add(request.getRetailPrice().multiply(VAT_RATE));
         }
 
         if (request.getQuantity() <= 0) {
@@ -98,7 +115,9 @@ public class ItemServiceImpl implements ItemService {
                 .category(new ObjectId(request.getCategory()))
                 .model(request.getModel())
                 .name(request.getName())
-                .price(request.getPrice())
+                .costPrice(request.getCostPrice())
+                .retailPrice(request.getRetailPrice())
+                .vatInclusivePrice(vatInclusivePrice)
                 .quantity(request.getQuantity())
                 .stockAlert(request.getStockAlert())
                 .sku(sku)
@@ -138,11 +157,27 @@ public class ItemServiceImpl implements ItemService {
             changes = true;
         }
 
-        if (request.getPrice() != item.getPrice()) {
-            if (request.getPrice() <= 0) {
-                throw new RequestValidationException("Item price can't be zero or below");
+        if (request.getCostPrice() != null && !Objects.equals(request.getCostPrice(), item.getCostPrice())) {
+            if (request.getCostPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RequestValidationException("Item cost price can't be zero or below");
             }
-            item.setPrice(request.getPrice());
+            item.setCostPrice(request.getCostPrice());
+            changes = true;
+        }
+
+        if (request.getRetailPrice() != null && !Objects.equals(request.getRetailPrice(), item.getRetailPrice())) {
+            if (request.getRetailPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RequestValidationException("Item retail price can't be zero or below");
+            }
+            item.setRetailPrice(request.getRetailPrice());
+            changes = true;
+        }
+
+        if (request.getVatInclusivePrice() != null && !Objects.equals(request.getVatInclusivePrice(), item.getVatInclusivePrice())) {
+            if (request.getVatInclusivePrice().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RequestValidationException("Item VAT inclusive price can't be zero or below");
+            }
+            item.setVatInclusivePrice(request.getVatInclusivePrice());
             changes = true;
         }
 
@@ -181,7 +216,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void increaseStock(String id, int quantity) {
-        Item item = itemRepository.findById(id)
+        Item item = itemRepository
+                .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
 
         item.setQuantity(item.getQuantity() + quantity);
@@ -190,7 +226,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void decreaseStock(String id, int quantity) {
-        Item item = itemRepository.findById(id)
+        Item item = itemRepository
+                .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found"));
 
         if (item.getQuantity() < quantity) {

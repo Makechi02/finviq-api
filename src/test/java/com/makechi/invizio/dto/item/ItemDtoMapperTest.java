@@ -1,6 +1,6 @@
 package com.makechi.invizio.dto.item;
 
-import com.makechi.invizio.collections.Item;
+import com.makechi.invizio.collections.item.Item;
 import com.makechi.invizio.dto.category.CategoryDtoMapper;
 import com.makechi.invizio.dto.category.ModelCategoryDto;
 import com.makechi.invizio.dto.user.ModelUserDto;
@@ -8,6 +8,8 @@ import com.makechi.invizio.dto.user.UserMapper;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -33,7 +35,9 @@ class ItemDtoMapperTest {
                 .brand("Samsung")
                 .model("Galaxy S21")
                 .name("Smartphone")
-                .price(799.99)
+                .costPrice(BigDecimal.valueOf(799.99))
+                .retailPrice(BigDecimal.valueOf(820))
+                .vatInclusivePrice(BigDecimal.valueOf(900))
                 .quantity(10)
                 .sku("S21-001")
                 .stockAlert(5)
@@ -55,7 +59,9 @@ class ItemDtoMapperTest {
         assertEquals("Samsung", itemDto.getBrand());
         assertEquals("Galaxy S21", itemDto.getModel());
         assertEquals("Smartphone", itemDto.getName());
-        assertEquals(799.99, itemDto.getPrice());
+        assertEquals(BigDecimal.valueOf(799.99), itemDto.getCostPrice());
+        assertEquals(BigDecimal.valueOf(820), itemDto.getRetailPrice());
+        assertEquals(BigDecimal.valueOf(900), itemDto.getVatInclusivePrice());
         assertEquals(10, itemDto.getQuantity());
         assertEquals("S21-001", itemDto.getSku());
         assertEquals(5, itemDto.getStockAlert());

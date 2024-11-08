@@ -1,6 +1,6 @@
 package com.makechi.invizio.repository;
 
-import com.makechi.invizio.collections.Item;
+import com.makechi.invizio.collections.item.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;

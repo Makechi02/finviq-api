@@ -13,9 +13,9 @@ import java.util.TimeZone;
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class InvizioApplication {
 
-	public static void main(String[] args) {
-		TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Africa/Nairobi")));
-		SpringApplication.run(InvizioApplication.class, args);
-	}
+    public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Africa/Nairobi")));
+        SpringApplication.run(InvizioApplication.class, args);
+    }
 
 }

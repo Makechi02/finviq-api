@@ -23,7 +23,7 @@ public interface ItemRepository extends MongoRepository<Item, String> {
 
     List<Item> findTop5ByOrderByCreatedAtDesc();
 
-    @Query(value = "{}", fields = "{price: 1, quantity: 1}")
+    @Query(value = "{}", fields = "{costPrice: 1, quantity: 1}")
     List<Item> findAllForInventoryValuation();
 
     @Query(value = "{}", fields = "{name: 1, quantity: 1, stockAlert: 1}")

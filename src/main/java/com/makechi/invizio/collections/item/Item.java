@@ -29,8 +29,6 @@ public class Item {
     private ObjectId createdBy;
     private String model;
     private String name;
-    @Deprecated
-    private double price;
     private double quantity;
     private BigDecimal retailPrice;
     private String sku;

@@ -73,6 +73,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
         BigDecimal vatInclusivePrice = BigDecimal.ZERO;
+        String sku;
 
         if (itemRepository.existsByName(request.getName())
                 && itemRepository.existsByBrand(request.getBrand())
@@ -88,7 +89,7 @@ public class ItemServiceImpl implements ItemService {
             throw new RequestValidationException("Item cost price can't be zero or below");
         }
 
-        if (request.getVatInclusivePrice().compareTo(BigDecimal.ZERO) <= 0) {
+        if (request.getVatInclusivePrice() == null || request.getVatInclusivePrice().compareTo(BigDecimal.ZERO) <= 0) {
             vatInclusivePrice = request.getRetailPrice().add(request.getRetailPrice().multiply(VAT_RATE));
         }
 
@@ -100,11 +101,7 @@ public class ItemServiceImpl implements ItemService {
             throw new RequestValidationException("Item stock alert can't be zero or below");
         }
 
-        String sku;
-
-        if (request.getSku() == null) {
-            sku = SKUGenerator.generateSKU(request.getName(), category.getName());
-        } else if (request.getSku().isBlank()) {
+        if (request.getSku() == null || request.getSku().isBlank()) {
             sku = SKUGenerator.generateSKU(request.getName(), category.getName());
         } else {
             sku = request.getSku();

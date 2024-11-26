@@ -12,6 +12,7 @@ public class AddUpdateItemRequest {
     private String category;
     private String model;
     private String name;
+    private String sku;
     private double price;
     private double quantity;
     private int stockAlert;

@@ -46,7 +46,7 @@ public class ItemController {
     @PostMapping
     @PreAuthorize("hasAuthority('item:create')")
     public ResponseEntity<ItemDto> addItem(@RequestBody AddUpdateItemRequest request) {
-        ItemDto item = itemService.addRequest(request);
+        ItemDto item = itemService.addItem(request);
         return new ResponseEntity<>(item, HttpStatusCode.valueOf(201));
     }
 

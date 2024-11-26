@@ -61,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto addRequest(AddUpdateItemRequest request) {
+    public ItemDto addItem(AddUpdateItemRequest request) {
         Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
@@ -83,7 +83,15 @@ public class ItemServiceImpl implements ItemService {
             throw new RequestValidationException("Item stock alert can't be zero or below");
         }
 
-        String sku = SKUGenerator.generateSKU(request.getName(), category.getName());
+        String sku;
+
+        if (request.getSku() == null) {
+            sku = SKUGenerator.generateSKU(request.getName(), category.getName());
+        } else if (request.getSku().isBlank()) {
+            sku = SKUGenerator.generateSKU(request.getName(), category.getName());
+        } else {
+            sku = request.getSku();
+        }
 
         Item item = Item.builder()
                 .brand(request.getBrand())

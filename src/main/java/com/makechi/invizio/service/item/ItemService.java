@@ -13,7 +13,7 @@ public interface ItemService {
 
     ItemDto getItemBySku(String sku);
 
-    ItemDto addRequest(AddUpdateItemRequest request);
+    ItemDto addItem(AddUpdateItemRequest request);
 
     ItemDto updateItem(String id, AddUpdateItemRequest request);
 

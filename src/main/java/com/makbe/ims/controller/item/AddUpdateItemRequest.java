@@ -14,6 +14,5 @@ public class AddUpdateItemRequest {
     private String name;
     private double price;
     private double quantity;
-    private String supplier;
     private int stockAlert;
 }

@@ -30,7 +30,6 @@ public class Item {
     private double price;
     private double quantity;
     private String sku;
-    private ObjectId supplier;
     private int stockAlert;
     @LastModifiedDate
     private LocalDateTime updatedAt;

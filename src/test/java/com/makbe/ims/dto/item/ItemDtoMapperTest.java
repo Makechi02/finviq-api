@@ -2,16 +2,12 @@ package com.makbe.ims.dto.item;
 
 import com.makbe.ims.collections.Category;
 import com.makbe.ims.collections.Item;
-import com.makbe.ims.collections.Supplier;
 import com.makbe.ims.collections.User;
 import com.makbe.ims.dto.category.CategoryDtoMapper;
 import com.makbe.ims.dto.category.ModelCategoryDto;
-import com.makbe.ims.dto.supplier.ModelSupplierDto;
-import com.makbe.ims.dto.supplier.SupplierDtoMapper;
 import com.makbe.ims.dto.user.ModelUserDto;
 import com.makbe.ims.dto.user.UserMapper;
 import com.makbe.ims.repository.CategoryRepository;
-import com.makbe.ims.repository.SupplierRepository;
 import com.makbe.ims.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +24,7 @@ class ItemDtoMapperTest {
 
     private UserRepository userRepository;
     private CategoryRepository categoryRepository;
-    private SupplierRepository supplierRepository;
     private CategoryDtoMapper categoryDtoMapper;
-    private SupplierDtoMapper supplierDtoMapper;
     private UserMapper userMapper;
     private ItemDtoMapper itemDtoMapper;
 
@@ -38,13 +32,10 @@ class ItemDtoMapperTest {
     void setUp() {
         userRepository = mock(UserRepository.class);
         categoryRepository = mock(CategoryRepository.class);
-        supplierRepository = mock(SupplierRepository.class);
         categoryDtoMapper = mock(CategoryDtoMapper.class);
-        supplierDtoMapper = mock(SupplierDtoMapper.class);
         userMapper = mock(UserMapper.class);
 
-        itemDtoMapper = new ItemDtoMapper(userRepository, categoryRepository, supplierRepository,
-                categoryDtoMapper, supplierDtoMapper, userMapper);
+        itemDtoMapper = new ItemDtoMapper(userRepository, userMapper, categoryRepository, categoryDtoMapper);
     }
 
     @Test
@@ -61,24 +52,19 @@ class ItemDtoMapperTest {
                 .createdBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .updatedBy(new ObjectId("66d0a17eb48aebab27f74eb6"))
                 .category(new ObjectId("66d0a8a9b48aebab27f74f5a"))
-                .supplier(new ObjectId("66f91601e9b4cd6e76c4fd1c"))
                 .build();
 
         User mockUser = mock(User.class);
         Category mockCategory = mock(Category.class);
-        Supplier mockSupplier = mock(Supplier.class);
         var mockCreatedByDto = Mockito.mock(ModelUserDto.class);
         var mockUpdatedByDto = Mockito.mock(ModelUserDto.class);
         var mockCategoryDto = Mockito.mock(ModelCategoryDto.class);
-        var mockSupplierDto = Mockito.mock(ModelSupplierDto.class);
 
         when(userRepository.findById("66d0a17eb48aebab27f74eb6")).thenReturn(Optional.of(mockUser));
         when(categoryRepository.findById("66d0a8a9b48aebab27f74f5a")).thenReturn(Optional.of(mockCategory));
-        when(supplierRepository.findById("66f91601e9b4cd6e76c4fd1c")).thenReturn(Optional.of(mockSupplier));
 
         when(userMapper.toModelUserDto(mockUser)).thenReturn(mockCreatedByDto).thenReturn(mockUpdatedByDto);
         when(categoryDtoMapper.toModelCategoryDto(mockCategory)).thenReturn(mockCategoryDto);
-        when(supplierDtoMapper.toModelSupplierDto(mockSupplier)).thenReturn(mockSupplierDto);
 
         ItemDto itemDto = itemDtoMapper.apply(item);
 
@@ -94,7 +80,6 @@ class ItemDtoMapperTest {
         assertEquals(mockCreatedByDto, itemDto.getCreatedBy());
         assertEquals(mockUpdatedByDto, itemDto.getUpdatedBy());
         assertEquals(mockCategoryDto, itemDto.getCategory());
-        assertEquals(mockSupplierDto, itemDto.getSupplier());
     }
 
     @Test

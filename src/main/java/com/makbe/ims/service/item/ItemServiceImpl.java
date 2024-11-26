@@ -10,7 +10,6 @@ import com.makbe.ims.exception.RequestValidationException;
 import com.makbe.ims.exception.ResourceNotFoundException;
 import com.makbe.ims.repository.CategoryRepository;
 import com.makbe.ims.repository.ItemRepository;
-import com.makbe.ims.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -26,7 +25,6 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
-    private final SupplierRepository supplierRepository;
     private final ItemDtoMapper itemDtoMapper;
 
     @Override
@@ -67,10 +65,6 @@ public class ItemServiceImpl implements ItemService {
         Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + request.getCategory() + " not found"));
 
-        if (!supplierRepository.existsById(request.getSupplier())) {
-            throw new ResourceNotFoundException("Supplier with id " + request.getSupplier() + " not found");
-        }
-
         if (itemRepository.existsByName(request.getName())
                 && itemRepository.existsByBrand(request.getBrand())
                 && itemRepository.existsByModel(request.getModel())) {
@@ -98,7 +92,6 @@ public class ItemServiceImpl implements ItemService {
                 .name(request.getName())
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
-                .supplier(new ObjectId(request.getSupplier()))
                 .stockAlert(request.getStockAlert())
                 .sku(sku)
                 .build();
@@ -150,15 +143,6 @@ public class ItemServiceImpl implements ItemService {
                 throw new RequestValidationException("Item quantity can't be zero or below");
             }
             item.setQuantity(request.getQuantity());
-            changes = true;
-        }
-
-        if (request.getSupplier() != null && !request.getSupplier().isBlank() && !new ObjectId(request.getSupplier()).equals(item.getSupplier())) {
-            if (!supplierRepository.existsById(request.getSupplier())) {
-                throw new ResourceNotFoundException("Supplier with id " + request.getSupplier() + " not found");
-            }
-
-            item.setSupplier(new ObjectId(request.getSupplier()));
             changes = true;
         }
 

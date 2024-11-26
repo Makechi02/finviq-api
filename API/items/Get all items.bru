@@ -5,13 +5,12 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/v1/items?query=sa&size=10&page=0&sortBy=title&sortDirection=asc
+  url: http://localhost:8080/api/v1/items?size=10&page=0&sortBy=title&sortDirection=asc
   body: none
   auth: bearer
 }
 
 params:query {
-  query: sa
   size: 10
   page: 0
   sortBy: title
@@ -19,5 +18,5 @@ params:query {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzI4MjM0Njg2LCJleHAiOjE3MjgzMjEwODZ9.UzaygEli0qRTJxkgll0u07x8D_jb72ddxwGQqIvgI10
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBpbXMuY29tIiwiaWF0IjoxNzMyNTgyMDM4LCJleHAiOjE3MzI2Njg0Mzh9.IzUceCUPjdV9hMh3PCIYJBkOCtTnLwhFMgdSmmhJZnY
 }

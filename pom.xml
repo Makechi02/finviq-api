@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.makbe</groupId>
-    <artifactId>invizio</artifactId>
+    <artifactId>finviq</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>invizio</name>
+    <name>finviq</name>
     <description>A inventory management system API</description>
     <url/>
     <licenses>

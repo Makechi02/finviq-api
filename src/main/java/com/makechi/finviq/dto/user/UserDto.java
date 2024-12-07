@@ -1,6 +1,6 @@
 package com.makechi.finviq.dto.user;
 
-import com.makechi.finviq.collections.Role;
+import com.makechi.finviq.collections.user.Role;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.makechi.finviq.service.user;
 
-import com.makechi.finviq.collections.User;
+import com.makechi.finviq.collections.user.User;
 import com.makechi.finviq.controller.user.UserUpdateRequest;
 import com.makechi.finviq.dto.user.UserDto;
 import com.makechi.finviq.dto.user.UserMapper;

@@ -1,7 +1,7 @@
 package com.makechi.finviq.dto.user;
 
-import com.makechi.finviq.collections.Role;
-import com.makechi.finviq.collections.User;
+import com.makechi.finviq.collections.user.Role;
+import com.makechi.finviq.collections.user.User;
 import com.makechi.finviq.exception.ResourceNotFoundException;
 import com.makechi.finviq.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

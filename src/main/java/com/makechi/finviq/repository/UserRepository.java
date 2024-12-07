@@ -1,6 +1,6 @@
 package com.makechi.finviq.repository;
 
-import com.makechi.finviq.collections.User;
+import com.makechi.finviq.collections.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

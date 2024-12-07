@@ -1,4 +1,4 @@
-package com.makechi.finviq.collections;
+package com.makechi.finviq.collections.user;
 
 import lombok.Builder;
 import lombok.Data;

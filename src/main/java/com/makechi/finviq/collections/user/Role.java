@@ -1,4 +1,4 @@
-package com.makechi.finviq.collections;
+package com.makechi.finviq.collections.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.makechi.finviq.collections.Permission.*;
+import static com.makechi.finviq.collections.user.Permission.*;
 
 @Getter
 @RequiredArgsConstructor

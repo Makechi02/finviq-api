@@ -1,6 +1,6 @@
 package com.makechi.finviq.config;
 
-import com.makechi.finviq.collections.User;
+import com.makechi.finviq.collections.user.User;
 import com.makechi.finviq.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

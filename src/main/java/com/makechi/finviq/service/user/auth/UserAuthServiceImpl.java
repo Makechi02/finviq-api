@@ -1,7 +1,7 @@
 package com.makechi.finviq.service.user.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.makechi.finviq.collections.User;
+import com.makechi.finviq.collections.user.User;
 import com.makechi.finviq.controller.user.UpdatePasswordRequest;
 import com.makechi.finviq.controller.user.auth.UserAuthResponse;
 import com.makechi.finviq.controller.user.auth.UserLoginRequest;

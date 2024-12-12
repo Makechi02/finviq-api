@@ -30,4 +30,4 @@ EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # Command to run the Spring Boot application
-CMD ["java", "-jar", "target/invizio-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/finviq-0.0.1-SNAPSHOT.jar"]
